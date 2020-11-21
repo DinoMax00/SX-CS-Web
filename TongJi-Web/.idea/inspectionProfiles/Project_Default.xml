@@ -1,0 +1,39 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="142" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="13">
+            <item index="0" class="java.lang.String" itemvalue="flask-moment" />
+            <item index="1" class="java.lang.String" itemvalue="six" />
+            <item index="2" class="java.lang.String" itemvalue="text-unidecode" />
+            <item index="3" class="java.lang.String" itemvalue="flask-sqlalchemy" />
+            <item index="4" class="java.lang.String" itemvalue="python-dotenv" />
+            <item index="5" class="java.lang.String" itemvalue="click" />
+            <item index="6" class="java.lang.String" itemvalue="bootstrap-flask" />
+            <item index="7" class="java.lang.String" itemvalue="sqlalchemy" />
+            <item index="8" class="java.lang.String" itemvalue="jinja2" />
+            <item index="9" class="java.lang.String" itemvalue="pathtools" />
+            <item index="10" class="java.lang.String" itemvalue="watchdog" />
+            <item index="11" class="java.lang.String" itemvalue="faker" />
+            <item index="12" class="java.lang.String" itemvalue="wtforms" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="W605" />
+          <option value="E741" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
