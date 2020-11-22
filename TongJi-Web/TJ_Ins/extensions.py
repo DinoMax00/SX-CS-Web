@@ -14,10 +14,19 @@ from flask_wtf import CSRFProtect
 
 bootstrap = Bootstrap()
 # 数据库
-ab = SQLAlchemy()
+db = SQLAlchemy()
 # 登录
 login_manager = LoginManager()
 # 图片上传
 dropzone = Dropzone()
 moment = Moment()
 csrf = CSRFProtect()
+
+
+# 用户加载函数 返回当前登录用户
+@login_manager.user_loader
+def load_user(user_id):
+    from TJ_Ins.models import User
+    user = User.query.get(int(user_id))
+    return user
+
