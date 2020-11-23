@@ -31,4 +31,4 @@ def login():
                 flash('您的账户已被冻结', 'warning')
                 return redirect(url_for('main.index'))
         flash('邮箱或密码错误', 'warning')
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
