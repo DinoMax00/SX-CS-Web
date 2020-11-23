@@ -1,25 +1,47 @@
-{% extends 'base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-{% block title %}Login{% endblock %}
+    <title>Signin Template for Bootstrap</title>
 
-{% block content %}
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-md-8">
-                <img src="{{ url_for('static', filename='images/index.jpg') }}" class="rounded img-fluid">
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-3 w-100 bg-light">
-                    <div class="card-header"><h4>Log in to Albumy</h4></div>
-                    <div class="card-body">
-                        {{ render_form(form) }}
-                        <hr>
-                        <p class="small"><a href="{{ url_for('.register') }}">Register new account</a></p>
-                        <p class="small"><a href="{{ url_for('.forget_password') }}">Forget password</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="background-image: url(../../static/images/timg.jpg);background-repeat: no-repeat; background-size:100% 100%; ">
+
+    <div class="container col-md-4 col-md-offset-4" style="height: 780px; padding-top: 10%;">
+
+      {{ render_form(form) }}
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

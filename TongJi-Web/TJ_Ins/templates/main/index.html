@@ -1,71 +1,102 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+{% from 'macros.html' import photo_card with context %}
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+{% block title %}Home{% endblock %}
 
-    <title>Starter Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">TJ-Ins</a>
+{% block content %}
+{% if current_user.is_authenticated %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            {% if photos %}
+                {% for photo in photos %}
+                    <div class="card mb-3 w-100 bg-light">
+                        <div class="card-header">
+                            <a class="dead-link" href="{{ url_for('user.index', username=photo.author.username) }}">
+                                <img class="rounded img-fluid avatar-s profile-popover"
+                                     data-href="{{ url_for('ajax.get_profile', user_id=photo.author.id) }}"
+                                     src="{{ url_for('main.get_avatar', filename=photo.author.avatar_m) }}">
+                            </a>
+                            <a class="profile-popover trend-card-avatar"
+                               data-href="{{ url_for('ajax.get_profile', user_id=photo.author.id) }}"
+                               href="{{ url_for('user.index', username=photo.author.username) }}">{{ photo.author.name }}</a>
+                            <span class="float-right">
+                <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ photo.timestamp }}"
+                       data-delay="500">
+                    {{ moment(photo.timestamp).fromNow(refresh=True) }}</small></span>
+                        </div>
+                        <div class="card-body">
+                            <div class="" align="center">
+                                <a class="thumbnail" href="{{ url_for('.show_photo', photo_id=photo.id) }}"
+                                   target="_blank">
+                                    <img class="img-fluid"
+                                         src="{{ url_for('.get_image', filename=photo.filename_m) }}">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <span class="oi oi-star"></span>
+                            <span id="collectors-count-{{ photo.id }}"
+                                  data-href="{{ url_for('ajax.collectors_count', photo_id=photo.id) }}">
+                                {{ photo.collectors|length }}
+                            </span>
+                            <span class="oi oi-comment-square"></span> {{ photo.comments|length }}
+                            <div class="float-right">
+                                {% if current_user.is_authenticated %}
+                                    <button class="{% if not current_user.is_collecting(photo) %}hide{% endif %}
+                                     btn btn-outline-secondary btn-sm uncollect-btn"
+                                            data-href="{{ url_for('ajax.uncollect', photo_id=photo.id) }}"
+                                            data-id="{{ photo.id }}">
+                                        <span class="oi oi-x"></span> Uncollect
+                                    </button>
+                                    <button class="{% if current_user.is_collecting(photo) %}hide{% endif %}
+                                     btn btn-outline-primary btn-sm collect-btn"
+                                            data-href="{{ url_for('ajax.collect', photo_id=photo.id) }}"
+                                            data-id="{{ photo.id }}">
+                                        <span class="oi oi-star"></span> Collect
+                                    </button>
+                                {% else %}
+                                    <form class="inline" method="post"
+                                          action="{{ url_for('main.collect', photo_id=photo.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                                            <span class="oi oi-star"></span> Collect
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            {% if photo.description %}
+                                <p class="card-text">{{ photo.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="tip text-center">
+                    <h3>No trends.</h3>
+                    <p><a href="{{ url_for('.explore') }}">Explore</a></p>
+                </div>
+            {% endif %}
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">一个</a></li>
-            <li><a href="#about">测试</a></li>
-            <li><a href="#contact">主页</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    
-
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+        <div class="col-md-3">
+            {% include 'main/_sidebar.html' %}
+        </div>
+    </div>
+    {% if photos %}
+        {{ render_pagination(pagination, align='center') }}
+    {% endif %}
+{% else %}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-8">
+                <img src="{{ url_for('static', filename='images/index.jpg') }}" class="rounded img-fluid">
+            </div>
+            <div class="col-md-4 align-self-center">
+                <h1>Albumy</h1>
+                <p>Capture and remember every wonderful moment.</p>
+                <p><a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}">Join Now</a></p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

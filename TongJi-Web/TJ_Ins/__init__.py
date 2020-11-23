@@ -70,7 +70,7 @@ def register_template_context(app):
 def register_errors(app):
     @app.errorhandler(404)
     def page_not_found(error):
-        return render_template('errors/404.html')#, 404
+        return render_template('errors/404.html'), 404
 
 
 

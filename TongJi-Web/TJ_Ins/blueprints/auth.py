@@ -16,9 +16,6 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-
     form = LoginForm()
     if form.validate_on_submit():
         # 数据库查询邮箱信息
