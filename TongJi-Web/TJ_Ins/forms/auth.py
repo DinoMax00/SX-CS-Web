@@ -12,6 +12,14 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from TJ_Ins.models import User
 
 
+# 登录表单
+class LoginForm(FlaskForm):
+    email = StringField('邮箱', validators=[DataRequired(), Length(1, 254), Email()])
+    password = PasswordField('密码', validators=[DataRequired()])
+    remember_me = BooleanField('记住我')
+    submit = SubmitField('登录')
+
+
 # 注册表单
 class RegisterForm(FlaskForm):
     # 考虑改为学号？ 算了 实名上网

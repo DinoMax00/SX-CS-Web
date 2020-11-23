@@ -1,0 +1,34 @@
+# -*- coding: utf-8 -*-
+# @Time : 2020/11/22 22:10
+# @File : auth.py
+# @author : Dino
+# 处理认证视图
+
+from flask import render_template, flash, redirect, url_for, Blueprint
+from flask_login import login_user, logout_user, login_required, current_user, login_fresh, confirm_login
+
+from TJ_Ins.forms.auth import LoginForm
+from TJ_Ins.models import User
+from TJ_Ins.utils import redirect_back
+
+auth_bp = Blueprint('auth', __name__)
+
+
+@auth_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        # 数据库查询邮箱信息
+        user = User.query.filter_by(email=form.email.data.lower()).first()
+        if user is not None and user.validate_password(form.password.data):
+            if login_user(user, form.remember_me.data):
+                flash('登陆成功', 'info')
+                return redirect_back()
+            else:
+                flash('您的账户已被冻结', 'warning')
+                return redirect(url_for('main.index'))
+        flash('邮箱或密码错误', 'warning')
+    return render_template('login.html', form=form)

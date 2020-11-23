@@ -24,6 +24,8 @@ class BaseConfig:
     # 关闭数据库警告信息
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    BOOTSTRAP_SERVE_LOCAL = True
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = \
