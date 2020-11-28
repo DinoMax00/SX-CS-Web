@@ -11,7 +11,8 @@ from TJ_Ins.forms.auth import LoginForm, RegisterForm
 from TJ_Ins.models import User
 from TJ_Ins.utils import redirect_back
 from TJ_Ins.extensions import db
-
+from TJ_Ins.emails import send_confirm_email
+from TJ_Ins.utils import generate_token, validate_token
 auth_bp = Blueprint('auth', __name__)
 
 
@@ -62,7 +63,23 @@ def register():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        # 发送认证邮件
+        token = generate_token(user=user, operation='confirm')
+        send_confirm_email(user=user, token=token)
         flash('认证邮件已发送，请注意查看', 'info')
         return redirect(url_for('.login'))
     return render_template('auth/register.html', form=form)
+
+
+# 邮件确认链接跳转
+@auth_bp.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+
+    if validate_token(user=current_user, token=token, operation=Operations.CONFIRM):
+        flash('Account confirmed.', 'success')
+        return redirect(url_for('main.index'))
+    else:
+        flash('Invalid or expired token.', 'danger')
+        return redirect(url_for('.resend_confirm_email'))

@@ -11,7 +11,7 @@ from flask_login import current_user
 from TJ_Ins.settings import config
 from TJ_Ins.blueprints.main import main_bp
 from TJ_Ins.blueprints.auth import auth_bp
-from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, csrf
+from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, csrf, mail
 
 
 # 创建实例的工厂函数 使用flask run命令时，程序就会调用该函数创建实例
@@ -41,6 +41,7 @@ def register_extensions(app):
     dropzone.init_app(app)
     moment.init_app(app)
     csrf.init_app(app)
+    mail.init_app(app)
 
 
 # 注册蓝本
