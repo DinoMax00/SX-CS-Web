@@ -19,6 +19,8 @@ else:
 
 # 基本配置
 class BaseConfig:
+    # 基本参数
+    INS_PHOTO_PER_PAGE = 12;
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
     # 关闭数据库警告信息

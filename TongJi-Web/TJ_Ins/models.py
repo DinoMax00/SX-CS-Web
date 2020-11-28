@@ -36,4 +36,19 @@ class User(db.Model, UserMixin):
     # 用户状态
     confirmed = db.Column(db.Boolean, default=False)
 
+    def __init__(self, **kwargs):
+        # 调用父类的构造函数
+        super(User, self).__init__(**kwargs)
+        # self.generate_avatar() #头像生成
+        # self.follow(self)
+        # self.set_role()
+
+    # 密码加密储存
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # 密码验证
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
