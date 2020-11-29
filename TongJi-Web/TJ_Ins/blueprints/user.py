@@ -7,7 +7,7 @@
 from flask import render_template, flash, redirect, url_for, current_app, request, Blueprint
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 # 其他TJ_Ins中函数 #
-from TJ_Ins.decorators import confirm_required, permission_required
+#from TJ_Ins.decorators import confirm_required, permission_required
 from TJ_Ins.emails import send_change_email_email
 from TJ_Ins.extensions import db, avatars
 from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
