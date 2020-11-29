@@ -5,6 +5,7 @@
 # 进行扩展实例化
 
 from flask_moment import Moment
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, AnonymousUserMixin
@@ -21,6 +22,8 @@ login_manager = LoginManager()
 dropzone = Dropzone()
 moment = Moment()
 csrf = CSRFProtect()
+# 邮件发送
+mail = Mail()
 
 
 # 用户加载函数 返回当前登录用户

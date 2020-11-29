@@ -1,16 +1,16 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e3267c74ed33dbcee4e235e83bb669e194326504bdee51266105631a3f5eebfa"
+            "sha256": "0c0b511d6601d650020413d89505bfcd5a117c26e3a0e892a6add574e47df9ca"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.9"
+            "python_version": "3.8"
         },
         "sources": [
             {
                 "name": "pypi",
-                "url": "https://pypi.org/simple",
+                "url": "https://pypi.tuna.tsinghua.edu.cn/simple",
                 "verify_ssl": true
             }
         ]
@@ -100,6 +100,13 @@
             ],
             "index": "pypi",
             "version": "==0.5.0"
+        },
+        "flask-mail": {
+            "hashes": [
+                "sha256:22e5eb9a940bf407bcf30410ecc3708f3c56cc44b29c34e1726fe85006935f41"
+            ],
+            "index": "pypi",
+            "version": "==0.9.1"
         },
         "flask-moment": {
             "hashes": [

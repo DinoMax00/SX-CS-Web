@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -16,6 +16,7 @@ flask-login = "*"
 python-dotenv = "*"
 pillow = "*"
 email-validator = "*"
+flask-mail = "*"
 
 [dev-packages]
 faker = "*"
