@@ -8,6 +8,13 @@
 * 施工中 希望两周左右完成
 
 ---
+#### 使用
+直接下载或使用git clone https://github.com/DinoMax00/SX-CS-Web.git 命令将项目下载到本地
+使用 pipenv install 指令安装虚拟环境
+pipenv shell下使用 flask initdb --drop 指令初始化数据库
+pipenv shell下使用 flask run 指令运行网站
+
+---
 #### 需要实现的功能
 * 用户登录
 * 用户注册
