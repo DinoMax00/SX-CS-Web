@@ -17,6 +17,7 @@ python-dotenv = "*"
 pillow = "*"
 email-validator = "*"
 flask-mail = "*"
+flask-avatars = "*"
 
 [dev-packages]
 faker = "*"

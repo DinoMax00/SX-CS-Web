@@ -9,7 +9,7 @@ from flask import render_template, flash, redirect, url_for, current_app, \
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
-from TJ_Ins.models import Photo, User, Collect, Comment
+from TJ_Ins.models import Photo, User, Collect, Comment, Tag
 from TJ_Ins.utils import rename_image, resize_image
 from TJ_Ins.forms.main import CommentForm, TagForm, DescriptionForm
 
@@ -27,7 +27,8 @@ def index():
     else:
         pagination = None
         photos = None
-    return render_template("main/index.html")
+    tags = Tag.query.join(Tag.photos).group_by(Tag.id).order_by(func.count(Photo.id).desc()).limit(10)
+    return render_template('main/index.html')
 
 
 # 上传照片
@@ -35,7 +36,6 @@ def index():
 @login_required
 def upload():
     if request.method == 'POST':  # and 'file' in request.files:
-        print("lll")
         f = request.files.get('file')  # dropzone默认上传文件属性值为file
         # 重新生成文件名
         filename = rename_image(f.filename)
@@ -65,6 +65,7 @@ def explore():
 # 生成图片下载链接
 @main_bp.route('/uploads/<path:filename>')
 def get_image(filename):
+    # flask中的send_from_directory函数可以从文件夹上传图片
     return send_from_directory(current_app.config['INS_UPLOAD_PATH'], filename)
 
 

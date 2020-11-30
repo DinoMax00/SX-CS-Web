@@ -9,22 +9,10 @@ import os
 from flask import current_app
 from datetime import datetime
 from TJ_Ins.extensions import db
-# 使用flask——login管理需要用户模型继承这个类
+# 使用flask—login管理需要用户模型继承这个类
 from flask_login import UserMixin
 # 用于对密码进行加密
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-# 收藏数
-class Collect(db.Model):
-    # 收藏者
-    collector_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    # 收藏的照片
-    collected_id = db.Column(db.Integer, db.ForeignKey('photo.id'), primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    collector = db.relationship('User', back_populates='collections', lazy='joined')
-    collected = db.relationship('Photo', back_populates='collectors', lazy='joined')
 
 
 # 用户
@@ -99,6 +87,18 @@ class Photo(db.Model):
     tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
 
 
+# 收藏数
+class Collect(db.Model):
+    # 收藏者
+    collector_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    # 收藏的照片
+    collected_id = db.Column(db.Integer, db.ForeignKey('photo.id'), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    collector = db.relationship('User', back_populates='collections', lazy='joined')
+    collected = db.relationship('Photo', back_populates='collectors', lazy='joined')
+
+
 # 图片标签
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -135,13 +135,5 @@ class Notification(db.Model):
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 收件人id
     receiver = db.relationship('User', back_populates='notifications')
 
-# 通知
-class Notification(db.Model):
-    id = db.Column(db.Integer, primary_key=True)    # 唯一标记
-    message = db.Column(db.Text, nullable=False)    # 通知主体
-    is_read = db.Column(db.Boolean, default=False)  # 是否已读
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True) # 时间戳
-    # 与唯一用户建立对应关系
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))   # 收件人id
-    receiver = db.relationship('User', back_populates='notifications')
+
 

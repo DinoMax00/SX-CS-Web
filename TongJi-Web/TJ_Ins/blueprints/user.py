@@ -10,16 +10,17 @@ from flask_login import login_required, current_user, fresh_login_required, logo
 from TJ_Ins.settings import Operations
 from TJ_Ins.models import User, Photo
 from TJ_Ins.extensions import db, avatars
-from TJ_Ins.notifications import push_follow_notification   # 通知
-from TJ_Ins.utils import generate_token, validate_token, redirect_back, flash_errors    # 组件
+# from TJ_Ins.notifications import push_follow_notification  # 通知
+from TJ_Ins.utils import generate_token, validate_token, redirect_back, flash_errors  # 组件
 from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
-    ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm  #用户表单
+    ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm  # 用户表单
 # (暂无/可有可无)
-from TJ_Ins.decorators import confirm_required, permission_required # 装饰器
-from TJ_Ins.models import Collect   # (暂无)收藏
-from TJ_Ins.emails import send_change_email_email   #(暂无) 发送更改邮件
+# from TJ_Ins.decorators import confirm_required, permission_required  # 装饰器
+from TJ_Ins.models import Collect  # (暂无)收藏
+# from TJ_Ins.emails import send_change_email_email  # (暂无) 发送更改邮件
 
 user_bp = Blueprint('user', __name__)
+
 
 # 用户主界面
 @user_bp.route('/<username>')
@@ -36,6 +37,7 @@ def index(username):
     photos = pagination.items
     return render_template('user/index.html', user=user, pagination=pagination, photos=photos)
 
+
 '''
 # 展示收藏夹
 @user_bp.route('/<username>/collections')
@@ -47,6 +49,7 @@ def show_collections(username):
     collects = pagination.items
     return render_template('user/collections.html', user=user, pagination=pagination, collects=collects)
 '''
+
 
 # 关注
 @user_bp.route('/follow/<username>', methods=['POST'])
@@ -65,6 +68,7 @@ def follow(username):
         push_follow_notification(follower=current_user, receiver=user)
     return redirect_back()
 
+
 # 取消关注
 @user_bp.route('/unfollow/<username>', methods=['POST'])
 @login_required
@@ -78,6 +82,7 @@ def unfollow(username):
     flash('取消关注成功.', 'info')
     return redirect_back()
 
+
 # 展示所有粉丝
 @user_bp.route('/<username>/followers')
 def show_followers(username):
@@ -87,6 +92,7 @@ def show_followers(username):
     pagination = user.followers.paginate(page, per_page)
     follows = pagination.items
     return render_template('user/followers.html', user=user, pagination=pagination, follows=follows)
+
 
 # 展示所有关注
 @user_bp.route('/<username>/following')
