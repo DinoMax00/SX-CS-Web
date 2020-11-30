@@ -7,9 +7,11 @@ import os
 from flask import render_template, flash, redirect, url_for, current_app, \
     send_from_directory, request, abort, Blueprint
 from flask_login import login_required, current_user
+from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
-from TJ_Ins.models import Photo
+from TJ_Ins.models import Photo, User, Collect, Comment
 from TJ_Ins.utils import rename_image, resize_image
+from TJ_Ins.forms.main import CommentForm, TagForm, DescriptionForm
 
 main_bp = Blueprint('main', __name__)
 
@@ -54,4 +56,40 @@ def upload():
 # 探索界面
 @main_bp.route('/explore')
 def explore():
-    return "探索界面"
+    # 四行三列 随机取12张图
+    # html中有一个change按钮，实质上是重新进入explore页面 再随机生成几张（因此可能会重复之前展示过的图片）
+    photos = Photo.query.order_by(func.random()).limit(12)
+    return render_template('main/explore.html', photos=photos)
+
+
+# 生成图片下载链接
+@main_bp.route('/uploads/<path:filename>')
+def get_image(filename):
+    return send_from_directory(current_app.config['INS_UPLOAD_PATH'], filename)
+
+
+# 图片点击后的详情界面
+@main_bp.route('/photo/<int:photo_id>')
+def show_photo(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['TJ_COMMENT_PER_PAGE']
+    pagination = Comment.query.with_parent(photo).order_by(Comment.timestamp.asc()).paginate(page, per_page)
+    comments = pagination.items
+
+    comment_form = CommentForm()
+    description_form = DescriptionForm()
+    tag_form = TagForm()
+
+    description_form.description.data = photo.description
+    return render_template('main/photo.html', photo=photo, comment_form=comment_form,
+                           description_form=description_form, tag_form=tag_form,
+                           pagination=pagination, comments=comments)
+
+
+
+
+
+
+
+

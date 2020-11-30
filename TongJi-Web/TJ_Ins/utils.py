@@ -102,6 +102,15 @@ def resize_image(image, filename, base_width):
     img.save(os.path.join(current_app.config['INS_UPLOAD_PATH'], filename), optimize=True, quality=85)
     return filename
 
+
+# 表单连续报错(闪现)
+def flash_errors(form):
+    # 循环表单中的所有错误
+    for field, errors in form.errors.items():
+        # 循环所有错误
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
+
 # 表单连续报错(闪现)
 def flash_errors(form):
     # 循环表单中的所有错误

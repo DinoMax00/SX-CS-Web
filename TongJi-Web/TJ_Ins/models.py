@@ -15,6 +15,18 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+# 收藏数
+class Collect(db.Model):
+    # 收藏者
+    collector_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    # 收藏的照片
+    collected_id = db.Column(db.Integer, db.ForeignKey('photo.id'), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    collector = db.relationship('User', back_populates='collections', lazy='joined')
+    collected = db.relationship('Photo', back_populates='collectors', lazy='joined')
+
+
 # 用户
 class User(db.Model, UserMixin):
     # 唯一编号
@@ -34,10 +46,15 @@ class User(db.Model, UserMixin):
     location = db.Column(db.String(50))
     # 用户注册时长
     member_since = db.Column(db.DateTime, default=datetime.utcnow)
-
     # 用户状态
     confirmed = db.Column(db.Boolean, default=False)
     locked = db.Column(db.Boolean, default=False)
+
+    # 外键
+    photos = db.relationship('Photo', back_populates='author', cascade='all')
+    comments = db.relationship('Comment', back_populates='author', cascade='all')
+    collections = db.relationship('Collect', back_populates='collector', cascade='all')
+    notifications = db.relationship('Notification', back_populates='receiver', cascade='all')
 
     def __init__(self, **kwargs):
         # 调用父类的构造函数
@@ -58,6 +75,12 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+tagging = db.Table('tagging',
+                   db.Column('photo_id', db.Integer, db.ForeignKey('photo.id')),
+                   db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+                   )
+
+
 # 图片
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,11 +92,48 @@ class Photo(db.Model):
     can_comment = db.Column(db.Boolean, default=True)
     flag = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    # 外键
     author = db.relationship('User', back_populates='photos')
-    # comments = db.relationship('Comment', back_populates='photo', cascade='all')
-    # collectors = db.relationship('Collect', back_populates='collected', cascade='all')
-    # tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
+    comments = db.relationship('Comment', back_populates='photo', cascade='all')
+    collectors = db.relationship('Collect', back_populates='collected', cascade='all')
+    tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
+
+
+# 图片标签
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    # 外键
+    photos = db.relationship('Photo', secondary=tagging, back_populates='tags')
+
+
+# 评论
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    flag = db.Column(db.Integer, default=0)
+
+    # 外键 评论的作者与对应照片
+    replied_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
+
+    photo = db.relationship('Photo', back_populates='comments')
+    author = db.relationship('User', back_populates='comments')
+    replies = db.relationship('Comment', back_populates='replied', cascade='all')
+    replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
+
+
+# 通知
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # 唯一标记
+    message = db.Column(db.Text, nullable=False)  # 通知主体
+    is_read = db.Column(db.Boolean, default=False)  # 是否已读
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)  # 时间戳
+    # 与唯一用户建立对应关系
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 收件人id
+    receiver = db.relationship('User', back_populates='notifications')
 
 # 通知
 class Notification(db.Model):
