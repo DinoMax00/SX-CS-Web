@@ -1,41 +1,43 @@
 # -*- coding: utf-8 -*-
-# @Time : 2020/11/21 20:16
+# @Time : 2020/11/30
 # @File : user.py
-# @author : Dino
+# @author : Dino, Ray
 
-# 必备flask函数 #
+# 导入公共库
 from flask import render_template, flash, redirect, url_for, current_app, request, Blueprint
 from flask_login import login_required, current_user, fresh_login_required, logout_user
-# 其他TJ_Ins中函数 #
-#from TJ_Ins.decorators import confirm_required, permission_required
-from TJ_Ins.emails import send_change_email_email
-from TJ_Ins.extensions import db, avatars
-from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
-    ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm
-from TJ_Ins.models import User, Photo, Collect
-from TJ_Ins.notifications import push_follow_notification
+# 导入自定义库
 from TJ_Ins.settings import Operations
-from TJ_Ins.utils import generate_token, validate_token, redirect_back, flash_errors
+from TJ_Ins.models import User, Photo
+from TJ_Ins.extensions import db, avatars
+from TJ_Ins.notifications import push_follow_notification   # 通知
+from TJ_Ins.utils import generate_token, validate_token, redirect_back, flash_errors    # 组件
+from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
+    ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm  #用户表单
+# (暂无/可有可无)
+from TJ_Ins.decorators import confirm_required, permission_required # 装饰器
+from TJ_Ins.models import Collect   # (暂无)收藏
+from TJ_Ins.emails import send_change_email_email   #(暂无) 发送更改邮件
 
 user_bp = Blueprint('user', __name__)
 
-
+# 用户主界面
 @user_bp.route('/<username>')
 def index(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user == current_user and user.locked:
-        flash('Your account is locked.', 'danger')
-
+        flash('当前账户已锁定', 'danger')
     if user == current_user and not user.active:
         logout_user()
 
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['ALBUMY_PHOTO_PER_PAGE']
+    per_page = current_app.config['TJ_INS_PHOTO_PER_PAGE']
     pagination = Photo.query.with_parent(user).order_by(Photo.timestamp.desc()).paginate(page, per_page)
     photos = pagination.items
     return render_template('user/index.html', user=user, pagination=pagination, photos=photos)
 
-
+'''
+# 展示收藏夹
 @user_bp.route('/<username>/collections')
 def show_collections(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -44,8 +46,9 @@ def show_collections(username):
     pagination = Collect.query.with_parent(user).order_by(Collect.timestamp.desc()).paginate(page, per_page)
     collects = pagination.items
     return render_template('user/collections.html', user=user, pagination=pagination, collects=collects)
+'''
 
-
+# 关注
 @user_bp.route('/follow/<username>', methods=['POST'])
 @login_required
 @confirm_required
@@ -53,29 +56,29 @@ def show_collections(username):
 def follow(username):
     user = User.query.filter_by(username=username).first_or_404()
     if current_user.is_following(user):
-        flash('Already followed.', 'info')
+        flash('已关注.', 'info')
         return redirect(url_for('.index', username=username))
 
     current_user.follow(user)
-    flash('User followed.', 'success')
+    flash('关注成功.', 'success')
     if user.receive_follow_notification:
         push_follow_notification(follower=current_user, receiver=user)
     return redirect_back()
 
-
+# 取消关注
 @user_bp.route('/unfollow/<username>', methods=['POST'])
 @login_required
 def unfollow(username):
     user = User.query.filter_by(username=username).first_or_404()
     if not current_user.is_following(user):
-        flash('Not follow yet.', 'info')
+        flash('未关注.', 'info')
         return redirect(url_for('.index', username=username))
 
     current_user.unfollow(user)
-    flash('User unfollowed.', 'info')
+    flash('取消关注成功.', 'info')
     return redirect_back()
 
-
+# 展示所有粉丝
 @user_bp.route('/<username>/followers')
 def show_followers(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -85,7 +88,7 @@ def show_followers(username):
     follows = pagination.items
     return render_template('user/followers.html', user=user, pagination=pagination, follows=follows)
 
-
+# 展示所有关注
 @user_bp.route('/<username>/following')
 def show_following(username):
     user = User.query.filter_by(username=username).first_or_404()

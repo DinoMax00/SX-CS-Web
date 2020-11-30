@@ -26,15 +26,18 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     # 姓名
     name = db.Column(db.String(30))
-
-    # 意义不明
+    # 个人主页
     website = db.Column(db.String(255))
+    # 个人简介
     bio = db.Column(db.String(120))
+    # 地址
     location = db.Column(db.String(50))
+    # 用户注册时长
     member_since = db.Column(db.DateTime, default=datetime.utcnow)
 
     # 用户状态
     confirmed = db.Column(db.Boolean, default=False)
+    locked = db.Column(db.Boolean, default=False)
 
     def __init__(self, **kwargs):
         # 调用父类的构造函数
@@ -71,3 +74,14 @@ class Photo(db.Model):
     # comments = db.relationship('Comment', back_populates='photo', cascade='all')
     # collectors = db.relationship('Collect', back_populates='collected', cascade='all')
     # tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
+
+# 通知
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)    # 唯一标记
+    message = db.Column(db.Text, nullable=False)    # 通知主体
+    is_read = db.Column(db.Boolean, default=False)  # 是否已读
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True) # 时间戳
+    # 与唯一用户建立对应关系
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))   # 收件人id
+    receiver = db.relationship('User', back_populates='notifications')
+

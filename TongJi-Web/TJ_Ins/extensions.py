@@ -11,20 +11,17 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, AnonymousUserMixin
 from flask_dropzone import Dropzone
 from flask_wtf import CSRFProtect
+from flask_avatars import Avatars
 
 
 bootstrap = Bootstrap()
-# 数据库
-db = SQLAlchemy()
-# 登录
-login_manager = LoginManager()
-# 图片上传
-dropzone = Dropzone()
+db = SQLAlchemy()   # 数据库
+login_manager = LoginManager()  # 登录
+dropzone = Dropzone()   # 图片上传
 moment = Moment()
-csrf = CSRFProtect()
-# 邮件发送
-mail = Mail()
-
+csrf = CSRFProtect()    # csrf验证
+mail = Mail()   # 邮件发送
+avatars = Avatars() # 虚拟头像
 
 # 用户加载函数 返回当前登录用户
 @login_manager.user_loader
@@ -32,4 +29,3 @@ def load_user(user_id):
     from TJ_Ins.models import User
     user = User.query.get(int(user_id))
     return user
-
