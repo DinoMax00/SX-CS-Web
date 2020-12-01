@@ -17,6 +17,7 @@ from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm,
 # (暂无/可有可无)
 # from TJ_Ins.decorators import confirm_required, permission_required  # 装饰器
 from TJ_Ins.models import Collect  # (暂无)收藏
+
 # from TJ_Ins.emails import send_change_email_email  # (暂无) 发送更改邮件
 
 user_bp = Blueprint('user', __name__)
@@ -26,13 +27,11 @@ user_bp = Blueprint('user', __name__)
 @user_bp.route('/<username>')
 def index(username):
     user = User.query.filter_by(username=username).first_or_404()
-    if user == current_user and user.locked:
-        flash('当前账户已锁定', 'danger')
     if user == current_user and not user.active:
         logout_user()
 
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['TJ_INS_PHOTO_PER_PAGE']
+    per_page = current_app.config['INS_PHOTO_PER_PAGE']
     pagination = Photo.query.with_parent(user).order_by(Photo.timestamp.desc()).paginate(page, per_page)
     photos = pagination.items
     return render_template('user/index.html', user=user, pagination=pagination, photos=photos)
@@ -54,8 +53,8 @@ def show_collections(username):
 # 关注
 @user_bp.route('/follow/<username>', methods=['POST'])
 @login_required
-#@confirm_required
-#@permission_required('FOLLOW')
+# @confirm_required
+# @permission_required('FOLLOW')
 def follow(username):
     user = User.query.filter_by(username=username).first_or_404()
     if current_user.is_following(user):
@@ -128,7 +127,7 @@ def edit_profile():
 
 @user_bp.route('/settings/avatar')
 @login_required
-#@confirm_required
+# @confirm_required
 def change_avatar():
     upload_form = UploadAvatarForm()
     crop_form = CropAvatarForm()
@@ -137,7 +136,6 @@ def change_avatar():
 
 @user_bp.route('/settings/avatar/upload', methods=['POST'])
 @login_required
-#@confirm_required
 def upload_avatar():
     form = UploadAvatarForm()
     if form.validate_on_submit():
@@ -145,14 +143,14 @@ def upload_avatar():
         filename = avatars.save_avatar(image)
         current_user.avatar_raw = filename
         db.session.commit()
-        flash('Image uploaded, please crop.', 'success')
+        flash('图片上传成功，请进行裁剪', '操作成功')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))
 
 
 @user_bp.route('/settings/avatar/crop', methods=['POST'])
 @login_required
-#@confirm_required
+# @confirm_required
 def crop_avatar():
     form = CropAvatarForm()
     if form.validate_on_submit():
@@ -191,7 +189,7 @@ def change_email_request():
     form = ChangeEmailForm()
     if form.validate_on_submit():
         token = generate_token(user=current_user, operation=Operations.CHANGE_EMAIL, new_email=form.email.data.lower())
-        #send_change_email_email(to=form.email.data, user=current_user, token=token)
+        # send_change_email_email(to=form.email.data, user=current_user, token=token)
         flash('Confirm email sent, check your inbox.', 'info')
         return redirect(url_for('.index', username=current_user.username))
     return render_template('user/settings/change_email.html', form=form)

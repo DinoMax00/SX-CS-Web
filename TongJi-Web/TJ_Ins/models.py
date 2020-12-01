@@ -51,6 +51,8 @@ class User(db.Model, UserMixin):
     # 用户状态
     confirmed = db.Column(db.Boolean, default=False)
     locked = db.Column(db.Boolean, default=False)
+    active = db.Column(db.Boolean, default=True)
+
     # 三种型号的头像
     avatar_s = db.Column(db.String(64))
     avatar_m = db.Column(db.String(64))
@@ -94,6 +96,10 @@ class User(db.Model, UserMixin):
         self.avatar_m = filename[1]
         self.avatar_l = filename[2]
         db.session.commit()
+
+    @property
+    def is_active(self):
+        return self.active
 
 
 tagging = db.Table('tagging',

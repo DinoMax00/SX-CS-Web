@@ -75,7 +75,7 @@ def get_image(filename):
 def show_photo(photo_id):
     photo = Photo.query.get_or_404(photo_id)
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['TJ_COMMENT_PER_PAGE']
+    per_page = current_app.config['INS_COMMENT_PER_PAGE']
     pagination = Comment.query.with_parent(photo).order_by(Comment.timestamp.asc()).paginate(page, per_page)
     comments = pagination.items
 
