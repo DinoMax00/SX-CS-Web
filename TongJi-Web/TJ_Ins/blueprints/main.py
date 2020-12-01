@@ -9,7 +9,7 @@ from flask import render_template, flash, redirect, url_for, current_app, \
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
-from TJ_Ins.models import Photo, User, Collect, Comment, Tag
+from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
 from TJ_Ins.utils import rename_image, resize_image
 from TJ_Ins.forms.main import CommentForm, TagForm, DescriptionForm
 
@@ -22,13 +22,14 @@ def index():
         # 获取浏览的页码
         page = request.args.get('page', 1, type=int)
         per_page = current_app.config['INS_PHOTO_PER_PAGE']
-
-        pass
+        # 使用paginate函数进行分页
+        pagination = Photo.query.order_by(Photo.timestamp.desc()).paginate(page, per_page)
+        photos = pagination.items
     else:
         pagination = None
         photos = None
     tags = Tag.query.join(Tag.photos).group_by(Tag.id).order_by(func.count(Photo.id).desc()).limit(10)
-    return render_template('main/index.html')
+    return render_template('main/index.html', pagination=pagination, photos=photos, tags=tags, Collect=Collect)
 
 
 # 上传照片
@@ -87,6 +88,11 @@ def show_photo(photo_id):
                            description_form=description_form, tag_form=tag_form,
                            pagination=pagination, comments=comments)
 
+
+# 在文件夹取出用户头像
+@main_bp.route('/avatars/<path:filename>')
+def get_avatar(filename):
+    return send_from_directory(current_app.config['AVATARS_SAVE_PATH'], filename)
 
 
 

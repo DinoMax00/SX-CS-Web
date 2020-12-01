@@ -11,8 +11,22 @@ from datetime import datetime
 from TJ_Ins.extensions import db
 # 使用flask—login管理需要用户模型继承这个类
 from flask_login import UserMixin
+# 头像生成
+from flask_avatars import Identicon
 # 用于对密码进行加密
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
+# 关注
+class Follow(db.Model):
+    follower_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                            primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                            primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    follower = db.relationship('User', foreign_keys=[follower_id], back_populates='following', lazy='joined')
+    followed = db.relationship('User', foreign_keys=[followed_id], back_populates='followers', lazy='joined')
 
 
 # 用户
@@ -37,8 +51,16 @@ class User(db.Model, UserMixin):
     # 用户状态
     confirmed = db.Column(db.Boolean, default=False)
     locked = db.Column(db.Boolean, default=False)
+    # 三种型号的头像
+    avatar_s = db.Column(db.String(64))
+    avatar_m = db.Column(db.String(64))
+    avatar_l = db.Column(db.String(64))
 
     # 外键
+    following = db.relationship('Follow', foreign_keys=[Follow.follower_id], back_populates='follower',
+                                lazy='dynamic', cascade='all')
+    followers = db.relationship('Follow', foreign_keys=[Follow.followed_id], back_populates='followed',
+                                lazy='dynamic', cascade='all')
     photos = db.relationship('Photo', back_populates='author', cascade='all')
     comments = db.relationship('Comment', back_populates='author', cascade='all')
     collections = db.relationship('Collect', back_populates='collector', cascade='all')
@@ -47,7 +69,7 @@ class User(db.Model, UserMixin):
     def __init__(self, **kwargs):
         # 调用父类的构造函数
         super(User, self).__init__(**kwargs)
-        # self.generate_avatar() #头像生成
+        self.generate_avatar()  # 头像生成
         # self.follow(self)
         # self.set_role()
 
@@ -61,6 +83,17 @@ class User(db.Model, UserMixin):
     # 密码验证
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # 初始化时完成头像生成
+    def generate_avatar(self):
+        # avatars提供的本地头像类型 像素风格
+        avatar = Identicon()
+        # 默认生成三张 text为随机文本
+        filename = avatar.generate(text=self.username)
+        self.avatar_s = filename[0]
+        self.avatar_m = filename[1]
+        self.avatar_l = filename[2]
+        db.session.commit()
 
 
 tagging = db.Table('tagging',
@@ -134,6 +167,8 @@ class Notification(db.Model):
     # 与唯一用户建立对应关系
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 收件人id
     receiver = db.relationship('User', back_populates='notifications')
+
+
 
 
 

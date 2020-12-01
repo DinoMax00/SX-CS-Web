@@ -13,15 +13,15 @@ from flask_dropzone import Dropzone
 from flask_wtf import CSRFProtect
 from flask_avatars import Avatars
 
-
 bootstrap = Bootstrap()
-db = SQLAlchemy()   # 数据库
+db = SQLAlchemy()  # 数据库
 login_manager = LoginManager()  # 登录
-dropzone = Dropzone()   # 图片上传
+dropzone = Dropzone()  # 图片上传
 moment = Moment()
-csrf = CSRFProtect()    # csrf验证
-mail = Mail()   # 邮件发送
-avatars = Avatars() # 虚拟头像
+csrf = CSRFProtect()  # csrf验证
+mail = Mail()  # 邮件发送
+avatars = Avatars()  # 虚拟头像
+
 
 # 用户加载函数 返回当前登录用户
 @login_manager.user_loader
