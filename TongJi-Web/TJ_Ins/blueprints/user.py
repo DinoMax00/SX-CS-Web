@@ -8,17 +8,12 @@ from flask import render_template, flash, redirect, url_for, current_app, reques
 from flask_login import login_required, current_user, fresh_login_required, logout_user
 # 导入自定义库
 from TJ_Ins.settings import Operations
-from TJ_Ins.models import User, Photo
+from TJ_Ins.models import User, Photo, Collect
 from TJ_Ins.extensions import db, avatars
-# from TJ_Ins.notifications import push_follow_notification  # 通知
-from TJ_Ins.utils import flash_errors  # 组件
+from TJ_Ins.utils import flash_errors, redirect_back  # 组件
 from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
     ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm  # 用户表单
-# (暂无/可有可无)
-# from TJ_Ins.decorators import confirm_required, permission_required  # 装饰器
-from TJ_Ins.models import Collect  # (暂无)收藏
 
-# from TJ_Ins.emails import send_change_email_email  # (暂无) 发送更改邮件
 
 user_bp = Blueprint('user', __name__)
 
@@ -37,17 +32,15 @@ def index(username):
     return render_template('user/index.html', user=user, pagination=pagination, photos=photos)
 
 
-'''
 # 展示收藏夹
 @user_bp.route('/<username>/collections')
 def show_collections(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['ALBUMY_PHOTO_PER_PAGE']
+    per_page = current_app.config['INS_PHOTO_PER_PAGE']
     pagination = Collect.query.with_parent(user).order_by(Collect.timestamp.desc()).paginate(page, per_page)
     collects = pagination.items
     return render_template('user/collections.html', user=user, pagination=pagination, collects=collects)
-'''
 
 
 # 关注
@@ -63,8 +56,6 @@ def follow(username):
 
     current_user.follow(user)
     flash('关注成功.', 'success')
-    if user.receive_follow_notification:
-        push_follow_notification(follower=current_user, receiver=user)
     return redirect_back()
 
 
@@ -87,7 +78,7 @@ def unfollow(username):
 def show_followers(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['ALBUMY_USER_PER_PAGE']
+    per_page = current_app.config['INS_USER_PER_PAGE']
     pagination = user.followers.paginate(page, per_page)
     follows = pagination.items
     return render_template('user/followers.html', user=user, pagination=pagination, follows=follows)
@@ -98,7 +89,7 @@ def show_followers(username):
 def show_following(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['ALBUMY_USER_PER_PAGE']
+    per_page = current_app.config['INS_USER_PER_PAGE']
     pagination = user.following.paginate(page, per_page)
     follows = pagination.items
     return render_template('user/following.html', user=user, pagination=pagination, follows=follows)

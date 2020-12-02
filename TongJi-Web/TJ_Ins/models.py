@@ -97,9 +97,47 @@ class User(db.Model, UserMixin):
         self.avatar_l = filename[2]
         db.session.commit()
 
+    # 收藏
+    def collect(self, photo):
+        if not self.is_collecting(photo):
+            collect = Collect(collector=self, collected=photo)
+            db.session.add(collect)
+            db.session.commit()
+
+    # 取消收藏
+    def uncollect(self, photo):
+        collect = Collect.query.with_parent(self).filter_by(collected_id=photo.id).first()
+        if collect:
+            db.session.delete(collect)
+            db.session.commit()
+
     # 检测是否已经收藏某张照片
     def is_collecting(self, photo):
         return Collect.query.with_parent(self).filter_by(collected_id=photo.id).first() is not None
+
+    # 关注
+    def follow(self, user):
+        if not self.is_following(user):
+            follow = Follow(follower=self, followed=user)
+            db.session.add(follow)
+            db.session.commit()
+
+    def unfollow(self, user):
+        follow = self.following.filter_by(followed_id=user.id).first()
+        if follow:
+            db.session.delete(follow)
+            db.session.commit()
+
+    # 检测是否已经关注某用户
+    def is_following(self, user):
+        if user.id is None:
+            # 不能关注自己
+            return False
+        return self.following.filter_by(followed_id=user.id).first() is not None
+
+    # 返回关注自己的用户
+    def is_followed_by(self, user):
+        return self.followers.filter_by(follower_id=user.id).first() is not None
 
     @property
     def is_active(self):

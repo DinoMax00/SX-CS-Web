@@ -12,6 +12,7 @@ from TJ_Ins.settings import config
 from TJ_Ins.blueprints.main import main_bp
 from TJ_Ins.blueprints.auth import auth_bp
 from TJ_Ins.blueprints.user import user_bp
+from TJ_Ins.blueprints.ajax import ajax_bp
 from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, csrf, avatars
 
 
@@ -50,6 +51,7 @@ def register_blueprints(app):
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(ajax_bp, url_prefix='/ajax')
 
 
 # 注册shell上下文处理函数

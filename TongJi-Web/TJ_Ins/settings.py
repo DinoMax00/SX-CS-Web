@@ -31,6 +31,7 @@ class BaseConfig:
     INS_MAIL_SUBJECT_PREFIX = '[TJ-Ins]'
     INS_UPLOAD_PATH = os.path.join(basedir, 'uploads')  # 图片存放路径
     INS_PHOTO_SIZE = {'small': 400, 'medium': 800}  # 两类图片大小 分别用于explore与主页
+    INS_USER_PER_PAGE = 20
     INS_COMMENT_PER_PAGE = 15  # 图片详情页的最大评论数
     INS_PHOTO_SUFFIX = {INS_PHOTO_SIZE['small']: '_s',
                         INS_PHOTO_SIZE['medium']: '_m'}

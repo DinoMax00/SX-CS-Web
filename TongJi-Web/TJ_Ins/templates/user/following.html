@@ -8,7 +8,7 @@
     {% include 'user/_header.html' %}
     <div class="row">
         <div class="col-md-12">
-            {% if follows|length != 1 %}
+            {% if follows|length != 0 %}
                 {% for follow in follows %}
                     {% if follow.followed != user %}
                         {{ user_card(user=follow.followed) }}
@@ -16,7 +16,7 @@
                 {% endfor %}
             {% else %}
                 <div class="tip">
-                    <h3>No followings.</h3>
+                    <h3>他还没有关注其他人</h3>
                 </div>
             {% endif %}
         </div>

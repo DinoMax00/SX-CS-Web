@@ -110,6 +110,20 @@ def collect(photo_id):
     return redirect(url_for('.show_photo', photo_id=photo_id))
 
 
+# 取消收藏
+@main_bp.route('/uncollect/<int:photo_id>', methods=['POST'])
+@login_required
+def uncollect(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    if not current_user.is_collecting(photo):
+        flash('Not collect yet.', 'info')
+        return redirect(url_for('.show_photo', photo_id=photo_id))
+
+    current_user.uncollect(photo)
+    flash('Photo uncollected.', 'info')
+    return redirect(url_for('.show_photo', photo_id=photo_id))
+
+
 # 删除照片
 @main_bp.route('/delete/photo/<int:photo_id>', methods=['POST'])
 @login_required
