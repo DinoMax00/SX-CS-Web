@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
 from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
-from TJ_Ins.utils import rename_image, resize_image
+from TJ_Ins.utils import rename_image, resize_image, flash_errors
 from TJ_Ins.forms.main import CommentForm, TagForm, DescriptionForm
 
 main_bp = Blueprint('main', __name__)
@@ -95,8 +95,84 @@ def get_avatar(filename):
     return send_from_directory(current_app.config['AVATARS_SAVE_PATH'], filename)
 
 
+# 收藏照片
+@main_bp.route('/collect/<int:photo_id>', methods=['POST'])
+@login_required
+def collect(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    # 检测是否收藏过该照片
+    if current_user.is_collecting(photo):
+        flash('收藏夹已有该照片', 'info')
+        return redirect(url_for('.show_photo', photo_id=photo_id))
+
+    current_user.collect(photo)
+    flash('收藏成功', 'success')
+    return redirect(url_for('.show_photo', photo_id=photo_id))
 
 
+# 删除照片
+@main_bp.route('/delete/photo/<int:photo_id>', methods=['POST'])
+@login_required
+def delete_photo(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    if current_user != photo.author:
+        abort(403)
+
+    db.session.delete(photo)
+    db.session.commit()
+    flash('照片删除成功', 'info')
+
+    photo_n = Photo.query.with_parent(photo.author).filter(Photo.id < photo_id).order_by(Photo.id.desc()).first()
+    if photo_n is None:
+        photo_p = Photo.query.with_parent(photo.author).filter(Photo.id > photo_id).order_by(Photo.id.asc()).first()
+        if photo_p is None:
+            return redirect(url_for('user.index', username=photo.author.username))
+        return redirect(url_for('.show_photo', photo_id=photo_p.id))
+    return redirect(url_for('.show_photo', photo_id=photo_n.id))
 
 
+# 发布评论
+@main_bp.route('/photo/<int:photo_id>/comment/new', methods=['POST'])
+@login_required
+def new_comment(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    page = request.args.get('page', 1, type=int)
+    form = CommentForm()
+    if form.validate_on_submit():
+        body = form.body.data
+        author = current_user._get_current_object()
+        comment = Comment(body=body, author=author, photo=photo)
+        replied_id = request.args.get('reply')
+        if replied_id:
+            comment.replied = Comment.query.get_or_404(replied_id)
 
+        db.session.add(comment)
+        db.session.commit()
+        flash('评论已发布', 'success')
+
+    flash_errors(form)
+    return redirect(url_for('.show_photo', photo_id=photo_id, page=page))
+
+
+# 删除照片
+@main_bp.route('/delete/comment/<int:comment_id>', methods=['POST'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    if current_user != comment.author and current_user != comment.photo.author \
+            and not current_user.can('MODERATE'):
+        abort(403)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('删除成功', 'info')
+    return redirect(url_for('.show_photo', photo_id=comment.photo_id))
+
+
+# 对评论进行回复
+@main_bp.route('/reply/comment/<int:comment_id>')
+@login_required
+def reply_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    return redirect(
+        url_for('.show_photo', photo_id=comment.photo_id, reply=comment_id,
+                author=comment.author.name) + '#comment-form')

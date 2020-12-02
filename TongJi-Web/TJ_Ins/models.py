@@ -97,6 +97,10 @@ class User(db.Model, UserMixin):
         self.avatar_l = filename[2]
         db.session.commit()
 
+    # 检测是否已经收藏某张照片
+    def is_collecting(self, photo):
+        return Collect.query.with_parent(self).filter_by(collected_id=photo.id).first() is not None
+
     @property
     def is_active(self):
         return self.active
@@ -161,6 +165,7 @@ class Comment(db.Model):
     photo = db.relationship('Photo', back_populates='comments')
     author = db.relationship('User', back_populates='comments')
     replies = db.relationship('Comment', back_populates='replied', cascade='all')
+    # 是否已被回复
     replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
 
 
