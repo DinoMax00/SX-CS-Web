@@ -12,7 +12,7 @@ from TJ_Ins.settings import config
 from TJ_Ins.blueprints.main import main_bp
 from TJ_Ins.blueprints.auth import auth_bp
 from TJ_Ins.blueprints.user import user_bp
-from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, csrf, mail, avatars
+from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, csrf, avatars
 
 
 # 创建实例的工厂函数 使用flask run命令时，程序就会调用该函数创建实例
@@ -42,7 +42,6 @@ def register_extensions(app):
     dropzone.init_app(app)
     moment.init_app(app)
     csrf.init_app(app)
-    mail.init_app(app)
     avatars.init_app(app)
 
 
@@ -93,5 +92,11 @@ def register_commands(app):
 
     # 玩一下
     @app.cli.command()
-    def 喵():
-        click.echo("喵喵喵")
+    @click.option('--喵喵', is_flag=True, help='miao~')  # 增加一个输入参数，通过is_flag设为bool类型
+    def 喵(喵喵):
+        if 喵喵:
+            click.confirm("喵喵", abort=True)
+            db.drop_all()
+            click.echo("喵喵喵")
+        db.create_all()
+        click.echo("喵喵喵喵")

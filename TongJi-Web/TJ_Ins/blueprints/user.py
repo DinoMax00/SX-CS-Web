@@ -11,7 +11,7 @@ from TJ_Ins.settings import Operations
 from TJ_Ins.models import User, Photo
 from TJ_Ins.extensions import db, avatars
 # from TJ_Ins.notifications import push_follow_notification  # 通知
-from TJ_Ins.utils import generate_token, validate_token, redirect_back, flash_errors  # 组件
+from TJ_Ins.utils import flash_errors  # 组件
 from TJ_Ins.forms.user import EditProfileForm, UploadAvatarForm, CropAvatarForm, ChangeEmailForm, \
     ChangePasswordForm, NotificationSettingForm, PrivacySettingForm, DeleteAccountForm  # 用户表单
 # (暂无/可有可无)

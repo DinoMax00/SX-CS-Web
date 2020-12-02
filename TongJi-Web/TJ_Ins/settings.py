@@ -36,14 +36,6 @@ class BaseConfig:
                         INS_PHOTO_SIZE['medium']: '_m'}
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
-    # 邮件相关
-    MAIL_SERVER = "smtp.qq.com"
-    MAIL_PORT = 25
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = "3325215198@qq.com"
-    MAIL_PASSWORD = "xxx"
-    MAIL_DEFAULT_SENDER = ('TJ-Ins', MAIL_USERNAME)
-
     # dropzone相关
     DROPZONE_INPUT_NAME = "file"
     DROPZONE_ALLOWED_FILE_TYPE = 'image'
