@@ -57,6 +57,7 @@ class User(db.Model, UserMixin):
     avatar_s = db.Column(db.String(64))
     avatar_m = db.Column(db.String(64))
     avatar_l = db.Column(db.String(64))
+    avatar_raw = db.Column(db.String(64))
 
     # 外键
     following = db.relationship('Follow', foreign_keys=[Follow.follower_id], back_populates='follower',

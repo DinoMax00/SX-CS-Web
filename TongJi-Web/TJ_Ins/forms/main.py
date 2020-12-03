@@ -17,11 +17,7 @@ class CommentForm(FlaskForm):
 
 # 图片介绍
 class DescriptionForm(FlaskForm):
-    description = TextAreaField('Description', validators=[Optional(), Length(0, 500)])
+    description = TextAreaField('简介', validators=[Optional(), Length(0, 500)])
     submit = SubmitField()
 
 
-# 图片标签
-class TagForm(FlaskForm):
-    tag = StringField('Add Tag (use space to separate)', validators=[Optional(), Length(0, 64)])
-    submit = SubmitField()

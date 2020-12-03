@@ -95,6 +95,7 @@ def show_following(username):
     return render_template('user/following.html', user=user, pagination=pagination, follows=follows)
 
 
+# 编辑个人资料
 @user_bp.route('/settings/profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -106,7 +107,7 @@ def edit_profile():
         current_user.website = form.website.data
         current_user.location = form.location.data
         db.session.commit()
-        flash('Profile updated.', 'success')
+        flash('个人资料已更新', 'success')
         return redirect(url_for('.index', username=current_user.username))
     form.name.data = current_user.name
     form.username.data = current_user.username
@@ -116,9 +117,9 @@ def edit_profile():
     return render_template('user/settings/edit_profile.html', form=form)
 
 
+# 修改头像
 @user_bp.route('/settings/avatar')
 @login_required
-# @confirm_required
 def change_avatar():
     upload_form = UploadAvatarForm()
     crop_form = CropAvatarForm()

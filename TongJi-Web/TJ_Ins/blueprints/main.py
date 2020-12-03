@@ -11,7 +11,7 @@ from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
 from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
 from TJ_Ins.utils import rename_image, resize_image, flash_errors
-from TJ_Ins.forms.main import CommentForm, TagForm, DescriptionForm
+from TJ_Ins.forms.main import CommentForm, DescriptionForm
 
 main_bp = Blueprint('main', __name__)
 
@@ -81,11 +81,10 @@ def show_photo(photo_id):
 
     comment_form = CommentForm()
     description_form = DescriptionForm()
-    tag_form = TagForm()
 
     description_form.description.data = photo.description
     return render_template('main/photo.html', photo=photo, comment_form=comment_form,
-                           description_form=description_form, tag_form=tag_form,
+                           description_form=description_form,
                            pagination=pagination, comments=comments)
 
 
@@ -190,3 +189,44 @@ def reply_comment(comment_id):
     return redirect(
         url_for('.show_photo', photo_id=comment.photo_id, reply=comment_id,
                 author=comment.author.name) + '#comment-form')
+
+
+# 用于在图片详情页面选择下一张照片与上一张照片
+@main_bp.route('/photo/n/<int:photo_id>')
+def photo_next(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo_n = Photo.query.with_parent(photo.author).filter(Photo.id < photo_id).order_by(Photo.id.desc()).first()
+
+    if photo_n is None:
+        flash('已经是最后一张了', 'info')
+        return redirect(url_for('.show_photo', photo_id=photo_id))
+    return redirect(url_for('.show_photo', photo_id=photo_n.id))
+
+
+@main_bp.route('/photo/p/<int:photo_id>')
+def photo_previous(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo_p = Photo.query.with_parent(photo.author).filter(Photo.id > photo_id).order_by(Photo.id.asc()).first()
+
+    if photo_p is None:
+        flash('已经是第一张了', 'info')
+        return redirect(url_for('.show_photo', photo_id=photo_id))
+    return redirect(url_for('.show_photo', photo_id=photo_p.id))
+
+
+# 编辑照片描述
+@main_bp.route('/photo/<int:photo_id>/description', methods=['POST'])
+@login_required
+def edit_description(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    if current_user != photo.author and not current_user.can('MODERATE'):
+        abort(403)
+
+    form = DescriptionForm()
+    if form.validate_on_submit():
+        photo.description = form.description.data
+        db.session.commit()
+        flash('简介已更新', 'success')
+
+    flash_errors(form)
+    return redirect(url_for('.show_photo', photo_id=photo_id))

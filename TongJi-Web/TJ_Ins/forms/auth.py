@@ -28,7 +28,7 @@ class RegisterForm(FlaskForm):
     username = StringField("用户名", validators=[DataRequired(), Length(1, 20), Regexp('^[a-zA-Z0-9\u4e00-\u9fa5]*$', message='用户名只能包含中文字符、字母大小写与数字')])
     password = PasswordField("密码", validators=[DataRequired(), Length(8, 128), EqualTo('passwordConfirm')])
     passwordConfirm = PasswordField("确认密码", validators=[DataRequired()])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
     # 检测邮箱是否已经被使用
     def validate_email(self, field):

@@ -19,10 +19,14 @@ class EditProfileForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired(),
                                               Length(1, 20),
                                               Regexp('^[a-zA-Z0-9\u4e00-\u9fa5]*$', message='用户名只能包含中文字符、字母大小写与数字')])
-    website = StringField('个人主页', validators=[Optional(), Length(0, 255)])
+
+    website = StringField('个人主页', validators=[Optional(), Length(0, 255),
+                                              Regexp('(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,'
+                                                     '@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?',
+                                                     message='请输入您的主页链接(http或https开头)')])
     location = StringField('城市', validators=[Optional(), Length(0, 50)])
     bio = TextAreaField('个人简介', validators=[Optional(), Length(0, 120)])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
     def validate_username(self, field):
         if field.data != current_user.username and User.query.filter_by(username=field.data).first():
@@ -32,13 +36,13 @@ class EditProfileForm(FlaskForm):
 # 上传图片的表单
 class UploadAvatarForm(FlaskForm):
     image = FileField('上传', validators=[FileRequired(), FileAllowed(['jpg', 'png'], '文件格式必须是\'.jpg\'或\'.png\'')])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
 
 # 更改邮箱地址的表单
 class ChangeEmailForm(FlaskForm):
     email = StringField('新的邮箱地址', validators=[DataRequired(), Length(1, 254), Email()])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
@@ -50,7 +54,7 @@ class ChangePasswordForm(FlaskForm):
     old_password = PasswordField('旧密码', validators=[DataRequired()])
     password = PasswordField('新密码', validators=[DataRequired(), Length(8, 128), EqualTo('password2')])
     password2 = PasswordField('再次输入新密码', validators=[DataRequired()])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
 
 # 通知设置的表单
@@ -77,10 +81,10 @@ class DeleteAccountForm(FlaskForm):
             raise ValidationError('用户名输入错误')
 
 
-# ？？？
+# 修改头像
 class CropAvatarForm(FlaskForm):
     x = HiddenField()
     y = HiddenField()
     w = HiddenField()
     h = HiddenField()
-    submit = SubmitField('Crop and Update')
+    submit = SubmitField('裁剪并上传')
