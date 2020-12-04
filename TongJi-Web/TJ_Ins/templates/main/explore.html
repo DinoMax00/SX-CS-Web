@@ -1,19 +1,59 @@
 {% extends 'base.html' %}
-{% from 'macros.html' import photo_card with context %}
-
-{% block title %}Explore{% endblock %}
-
+    {% block css %}
+        <link href="album.css" rel="stylesheet">
+    {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            {% for photo in photos %}
-                {{ photo_card(photo) }}
-            {% endfor %}
+
+
+    <main role="main">
+
+      <section class="jumbotron text-center">
+        <div class="container">
+          <p class="lead text-muted"><br/>“任一年中有12张有意义的照片就是一个好收获了。”&nbsp——安塞尔·亚当斯<br/><br/></p>
+          <p>
+            <a href="{{url_for('main.upload')}}" class="btn btn-primary my-2">点击上传你的照片！</a>
+          </p>
         </div>
-    </div>
-    <div class="text-center">
-        <a class="btn btn-primary" href="{{ url_for('.explore') }}">
-            <span class="oi oi-loop-circular"></span> Change
-        </a>
-    </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+
+          <div class="row">
+            {% for photo in photos %}
+
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <a class="card-thumbnail" href="{{ url_for('main.show_photo', photo_id=photo.id) }}">
+                    <img class="card-img-top portrait" src="{{ url_for('main.get_image', filename=photo.filename_s) }}">
+                </a>
+                <div class="card-body">
+                  {% if photo.description %}
+                    <p class="card-text">{{ photo.description }}</p>
+                  {% else %}
+                    <p class="card-text">&nbsp;</p>
+                  {% endif %}
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="oi oi-star" style="margin-left: 0;margin-right: 0;">&nbsp{{ photo.collectors|length }}</span>
+                    <span class="oi oi-comment-square" style="margin-left:-75px;margin-right: 0;">&nbsp{{ photo.comments|length }}</span>
+                    <small class="text-muted">上传于{{ moment(photo.timestamp).format('LL') }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+           {% endfor %}
+
+          </div>
+
+          <div class="text-center">
+            <a class="btn btn-primary" href="{{ url_for('.explore') }}">
+                <span class="oi oi-loop-circular">换一批看看</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
 {% endblock %}
+
