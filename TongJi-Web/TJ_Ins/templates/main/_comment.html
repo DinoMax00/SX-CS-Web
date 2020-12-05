@@ -1,36 +1,40 @@
+<link rel="stylesheet" href="../../static/css/comment.css">
 <div class="comments" id="comments">
-    <h3>{{ photo.comments|length }} 评论
+    <h3>{{ photo.comments|length }} 条评论
         <small>
-            <a href="{{ url_for('.show_photo', photo_id=photo.id, page=pagination.pages or 1) }}#comment-form">刷新</a>
+            <a href="{{ url_for('.show_photo', photo_id=photo.id, page=pagination.pages or 1) }}#comment-form">最新</a>
         </small>
     </h3>
     <hr>
     <!--显示评论列表-->
     {% if comments %}
-        {% for comment in comments %}
-            <div class="comment">
-                <div class="comment-thumbnail">
-                    <a href="{{ url_for('user.index', username=comment.author.username) }}">
-                        <img class="rounded img-fluid avatar-s profile-popover"
-                             data-href="{{ url_for('ajax.get_profile', user_id=comment.author.id) }}"
-                             src="{{ url_for('main.get_avatar', filename=comment.author.avatar_m) }}">
-                    </a>
-                </div>
-                <div class="comment-body">
-                    <h6>
-                        <a class="profile-popover"
-                           data-href="#"
-                           href="#">
-                            {{ comment.author.name }}
-                        </a>
-                        {% if comment.author == photo.author %}
-                            <span class="badge badge-light">发布者</span>
-                        {% endif %}
-                        <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ comment.timestamp }}"
-                               data-delay="500">
-                            {{ moment(comment.timestamp).fromNow(refresh=True) }}
-                        </small>
-                        {% if current_user.is_authenticated %}
+        <div class="comments-container">
+        <ul id="comments-list" class="comments-list">
+            {% for comment in comments %}
+                <li>
+				<div class="comment-main-level">
+					<!-- Avatar -->
+					<div class="comment-avatar" ><img src="{{ url_for('main.get_avatar', filename=comment.author.avatar_m) }}" alt=""></div>
+					<!-- Contenedor del Comentario -->
+					<div class="comment-box">
+						<div class="comment-head">
+                            {% if comment.author == photo.author %}
+                                <h6 class="comment-name by-author">
+                            {% else %}
+                                <h6 class="comment-name">
+                            {% endif %}
+							<a href="{{ url_for('user.index', username=comment.author.username) }}">{{ comment.author.name }}</a></h6>
+							<span>{{ moment(comment.timestamp).fromNow(refresh=True) }}</span>
+                                {% if comment.replied %}
+                                    <span class="float-right">
+                                        回复给
+                                        <a href="{{ url_for('user.index', username=comment.replied.author.username) }}">{{ comment.replied.author.name }}</a>
+                                    </span>
+                                 {% endif %}
+						</div>
+						<div class="comment-content">
+							{{ comment.body }}
+                            {% if current_user.is_authenticated %}
                             <span class="float-right">
                             <span class="dropdown">
                                 <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton"
@@ -58,30 +62,27 @@
                                 </span>
                             </span>
                         {% endif %}
-                    </h6>
-                    <p>
-                        {% if comment.replied %}
-                            回复给
-                            <a href="{{ url_for('user.index', username=comment.replied.author.username) }}">{{ comment.replied.author.name }}</a>:
-                        {% endif %}
-                        {{ comment.body }}
-                    </p>
-                </div>
-            </div>
-            <hr>
+						</div>
+					</div>
+				</div>
+            </li>
+
+
         {% endfor %}
+        </ul>
+        </div>
         <div class="page-footer">
             {{ render_pagination(pagination) }}
         </div>
     {% else %}
-        <p class="tip">No comments.</p>
+        <p class="tip">这里还空空如也~</p>
     {% endif %}
 
         {% if current_user.is_authenticated %}
                 {% if request.args.get('reply') %}
                     <div class="alert alert-dark">
                         回复给 {{ request.args.get('author') }}:
-                        <a class="float-right" href="{{ url_for('.show_photo', photo_id=photo.id) }}">Cancel</a>
+                        <a class="float-right" href="{{ url_for('.show_photo', photo_id=photo.id) }}">取消</a>
                     </div>
                 {% endif %}
                 <div class="comment-form-area">
@@ -98,9 +99,9 @@
 
         {% else %}
             <p class="tip">
-                <a href="{{ url_for('auth.login') }}">Login</a>
-                or
-                <a href="{{ url_for('auth.register') }}">Register</a> to leave a comment.
+                <a href="{{ url_for('auth.login') }}">登录</a>
+                或
+                <a href="{{ url_for('auth.register') }}">注册新账号</a> 来发表评论
             </p>
         {% endif %}
 </div>

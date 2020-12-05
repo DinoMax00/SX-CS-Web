@@ -11,8 +11,8 @@ from wtforms.validators import DataRequired, Optional, Length
 
 # 评论表单
 class CommentForm(FlaskForm):
-    body = TextAreaField('', validators=[DataRequired()])
-    submit = SubmitField()
+    body = TextAreaField('', validators=[DataRequired(message='回复不能为空')])
+    submit = SubmitField('发布')
 
 
 # 图片介绍

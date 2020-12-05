@@ -38,6 +38,8 @@ class BaseConfig:
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
     # dropzone相关
+    DROPZONE_DEFAULT_MESSAGE = '</br></br></br><font size=6 color="#00bfff"><b><span class="oi oi-cloud-upload"></span>&nbsp点击或拖拽上传文件</b></font> '
+    DROPZONE_INVALID_FILE_TYPE = "仅支持.png与.jpg格式文件"
     DROPZONE_INPUT_NAME = "file"
     DROPZONE_ALLOWED_FILE_TYPE = 'image'
     DROPZONE_MAX_FILE_SIZE = 3  # 3MB
