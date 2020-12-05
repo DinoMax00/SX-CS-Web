@@ -1,8 +1,8 @@
 # 计科导大作业：TJ_INS
 
 > 和朋友分享你的热爱，用照片记录你的生活&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TJ_Ins，你的生活，本就精彩.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—— Group One
->
-
+</br>
+</br>
 
 ## 项目简介
 
@@ -11,7 +11,8 @@
 * 前后端使用BootStrap+Flask
 
 * 项目参考 [Albumy]
-
+</br>
+</br>
 
 ## 成员分工
 
@@ -24,14 +25,15 @@
 |  胡昊育  |  XX  |  XXXXXX  |
 |  魏鹏远  |  XX  |  XXXXXX  |
 |  荆宇泉  |  XX  |  XXXXXX  |
-
+</br>
+</br>
 
 ## 使用方法
 
 * 首先，你需要将这个项目保存在电脑本地。为此你可以选择：
   1.  点击上方绿色的 `Code`，选择 `Download ZIP` ，直接下载；
   2.  如果你的电脑上已经安装了 git 指令集，你也可以使用如下指令：
-    ` git clone https://github.com/DinoMax00/SX-CS-Web.git` 
+      ` git clone https://github.com/DinoMax00/SX-CS-Web.git` 
 
 * 之后，你需要 `cd` 到项目所在目录下的 `../TongJi-Web` 目录
   * 如果你不熟悉 cd 指令，没关系，[This] will help you !
@@ -45,10 +47,12 @@
 ```
 
 - 现在你就可以在本地运行我们的网页啦！
+
   > 哦？什么？提示没有 pipenv 指令？啊！看来你还是 python 新手啊！那还是建议你先好好回去夯实基础吧！
   >
   > ~~反正这个网站也没什么看头😁~~
-
+</br>
+</br>
 
 ## 网站功能
 
@@ -71,7 +75,8 @@
   - [x] 404等错误页面
   - [x] 图片点进去后的评论界面
   - [x] 上传
-
+</br>
+</br>
 
 ## 开发进度表
 
