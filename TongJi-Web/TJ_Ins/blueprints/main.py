@@ -29,6 +29,8 @@ def index():
         pagination = None
         photos = None
     tags = Tag.query.join(Tag.photos).group_by(Tag.id).order_by(func.count(Photo.id).desc()).limit(10)
+    if not current_user.is_authenticated:
+        return render_template('main/main_page.html')
     return render_template('main/index.html', pagination=pagination, photos=photos, tags=tags, Collect=Collect)
 
 

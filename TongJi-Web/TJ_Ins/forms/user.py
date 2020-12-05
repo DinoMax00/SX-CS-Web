@@ -62,7 +62,7 @@ class NotificationSettingForm(FlaskForm):
     receive_comment_notification = BooleanField('新的评论')
     receive_follow_notification = BooleanField('新的关注者')
     receive_collect_notification = BooleanField('新的收藏')
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
 
 # 隐私权限设置的表单
@@ -74,7 +74,7 @@ class PrivacySettingForm(FlaskForm):
 # 删除账户的表单
 class DeleteAccountForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired(), Length(1, 20)])
-    submit = SubmitField()
+    submit = SubmitField('提交')
 
     def validate_username(self, field):
         if field.data != current_user.username:

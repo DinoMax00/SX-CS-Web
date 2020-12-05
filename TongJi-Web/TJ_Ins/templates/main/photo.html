@@ -15,7 +15,7 @@
             <a class="btn btn-primary btn-sm text-white" data-toggle="modal" data-target="#share-modal">分享</a>
             {% if current_user == photo.author %}
                 <a class="btn btn-danger btn-sm text-white" data-toggle="modal" data-target="#confirm-delete"
-                   data-href="{{ url_for('.delete_photo', photo_id=photo.id) }}">Delete</a>
+                   data-href="{{ url_for('.delete_photo', photo_id=photo.id) }}">删除</a>
             {% endif %}
             <p class="text-muted float-right small">
                 <span class="oi oi-clock"></span> 上传于 {{ moment(photo.timestamp).format('LL') }}

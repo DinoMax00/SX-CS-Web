@@ -1,42 +1,67 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends 'base.html' %}
+{% block title %}404{% endblock %}
+{% block styles %}
+    <style>
+        .page_404 {
+            background: #fff;
+            font-family: 'Arvo', serif;
+        }
 
-    <link rel="stylesheet" href="../../static/css/404.css">
-  </head>
+        .page_404 img {
+            width: 100%;
+        }
 
-<body>
+        .four_zero_four_bg {
+
+            background-image: url(../../static/images/404.gif);
+            height: 400px;
+            background-position: center;
+        }
+
+
+        .four_zero_four_bg h1 {
+            font-size: 80px;
+        }
+
+        .four_zero_four_bg h3 {
+            font-size: 80px;
+        }
+
+        .link_404 {
+            color: #fff !important;
+            padding: 10px 20px;
+            background: #39ac31;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .contant_box_404 {
+            margin-top: -116px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
 
     <section class="page_404">
-	<div class="container">
-		<div class="row">
-		<div class="col-sm-12 ">
-		<div class="col-sm-10 col-sm-offset-1  text-center">
-		<div class="four_zero_four_bg">
-			<h1 class="text-center ">404</h1>
-		</div>
+        <div class="container" style="margin-top: 5%; padding-left:120px" >
+            <div class="row">
+                <div class="col-sm-12 ">
+                    <div class="col-sm-10 col-sm-offset-1  text-center">
+                        <div class="four_zero_four_bg" style="height: 550px;">
+                            <h1 class="text-center" style="font-family: fantasy;">404</h1>
+                        </div>
 
-		<div class="contant_box_404">
-		<h3 class="h2">
-		Look like you're lost
-		</h3>
-
-		<p>the page you are looking for not avaible!</p>
-
-		<a href="" class="link_404">Go to Home</a>
-	</div>
-		</div>
-		</div>
-		</div>
-	</div>
-</section>
-
-
-    <!-- JS -->
-    <script src="../../static/js/jquery.min.js"></script>
-    <!-- <script src="js/main.js"></script> -->
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-</html>
+                        <div class="contant_box_404">
+                            <h3 class="h2" style="font-family: none;">
+                                网页不小心走丢了...
+                            </h3>
+                            <a href="{{url_for('main.index')}}" class="link_404" style="font-family: none;">回到主页</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

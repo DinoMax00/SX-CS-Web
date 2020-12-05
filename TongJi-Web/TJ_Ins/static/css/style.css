@@ -49,6 +49,7 @@
     margin-top: 20px;
     padding-top: 38px;
     padding-bottom: 38px;
+    z-index: -5;
 }
 
 nav {
@@ -63,8 +64,8 @@ footer {
 
 /* for navbar */
 .avatar-xs {
-    width: 22px;
-    height: 22px;
+    width: 45px;
+    height: 45px;
     border-radius: 2px;
 }
 
