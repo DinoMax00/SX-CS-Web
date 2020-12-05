@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8773a0ed52d0b2e9a1e9b425d24a6ef60973f40ddd1a380507ab221b667f37f8"
+            "sha256": "d27c0f2a3f53a8c6f6ce2f5d1c3445659a8587e1a9df4062940b01e3a8437a60"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.9"
+            "python_version": "3.8"
         },
         "sources": [
             {
@@ -314,11 +314,11 @@
     "develop": {
         "faker": {
             "hashes": [
-                "sha256:5398268e1d751ffdb3ed36b8a790ed98659200599b368eec38a02eed15bce997",
-                "sha256:d4183b8f57316de3be27cd6c3b40e9f9343d27c95c96179f027316c58c2c239e"
+                "sha256:7bca5b074299ac6532be2f72979e6793f1a2403ca8105cb4cf0b385a964469c4",
+                "sha256:fb21a76064847561033d8cab1cfd11af436ddf2c6fe72eb51b3cda51dff86bdc"
             ],
             "index": "pypi",
-            "version": "==4.17.1"
+            "version": "==5.0.0"
         },
         "pathtools": {
             "hashes": [

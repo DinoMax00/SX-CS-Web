@@ -20,7 +20,7 @@ from TJ_Ins.extensions import bootstrap, db, login_manager, dropzone, moment, cs
 def create_app(config_name=None):
     # 没有传入配置名 就从环境变量中获取，如果没有则使用默认值
     if config_name is None:
-        config_name = os.getenv('FLASK_CONFIG', 'development')
+        config_name = os.getenv('FLASK_CONFIG', 'production')
     app = Flask('TJ_Ins')
 
     app.config.from_object(config[config_name])

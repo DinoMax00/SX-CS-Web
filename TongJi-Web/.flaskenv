@@ -1,2 +1,2 @@
 FLASK_APP=TJ_Ins
-FLASK_ENV=development
+FLASK_ENV=production
