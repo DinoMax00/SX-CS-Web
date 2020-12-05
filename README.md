@@ -35,16 +35,15 @@
       ` git clone https://github.com/DinoMax00/SX-CS-Web.git` 
 
 * 之后，你需要 `cd` 到项目所在目录下的 `../TongJi-Web` 目录
-  
   * 如果你不熟悉 cd 指令，没关系，[This] will help you !
   
 * 现在，你已经离在本地运行这个网站不远啦！你还需要依次执行以下指令：
 
-  ```cmake
-  -> pipenv install
+```cmake
+-> pipenv install
 -> pipenv shell
 -> flask initdb --drop
-  -> flask run
+-> flask run
 ```
 
 - 现在你就可以在本地运行我们的网页啦！
