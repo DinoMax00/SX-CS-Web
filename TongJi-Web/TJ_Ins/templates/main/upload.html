@@ -10,13 +10,13 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>上传</h1>
+        <h1></h1>
     </div>
     <div class="row">
         <div class="col-md-12">
             {{ dropzone.create(action='main.upload') }}
             <a class="btn btn-light float-right" href="{{ url_for('main.index')}}">
-                点击上传
+                上传
             </a>
         </div>
     </div>

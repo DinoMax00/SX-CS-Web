@@ -117,11 +117,11 @@ def collect(photo_id):
 def uncollect(photo_id):
     photo = Photo.query.get_or_404(photo_id)
     if not current_user.is_collecting(photo):
-        flash('Not collect yet.', 'info')
+        flash('还没有收藏', 'info')
         return redirect(url_for('.show_photo', photo_id=photo_id))
 
     current_user.uncollect(photo)
-    flash('Photo uncollected.', 'info')
+    flash('取消成功', 'info')
     return redirect(url_for('.show_photo', photo_id=photo_id))
 
 

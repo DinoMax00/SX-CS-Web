@@ -18,6 +18,6 @@ class CommentForm(FlaskForm):
 # 图片介绍
 class DescriptionForm(FlaskForm):
     description = TextAreaField('简介', validators=[Optional(), Length(0, 500)])
-    submit = SubmitField()
+    submit = SubmitField('发布')
 
 
