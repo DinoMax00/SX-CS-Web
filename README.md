@@ -7,26 +7,11 @@
 
 * **类型：** 这是一个面向同济校内的**图片社交网站**，我们称它为 **同济-Ins**；
 
-* **前后端：** 前端使用BootStrap，后端使用Flask实现；
-
 * **时间：** 项目前期准备时间较长，但从施工到大部分完成大约花费20天；
 
-* **网站截图：**
-
-  * 未登录的主页面：
-
-    ![image-20201213200911792](./resource/image-20201213200911792.png)
-
-  - 404错误页面：
-
-    ![image-20201213201321080](./resource/image-20201213201321080.png)
-
-  - 发现界面（社区界面）：
-
-    ![image-20201213201735310](./resource/image-20201213201735310.png)
+* **前后端：** 前端使用BootStrap，后端使用Flask实现；
 
   </br>
-
 
 ## 成员分工
 
@@ -110,7 +95,7 @@
 
 ## 部分代码
 
-- 额外定义flask命令行命令：
+- **额外定义flask命令行命令：**
 
   ```python
   def register_commands(app):
@@ -126,7 +111,7 @@
           click.echo("初始化数据库成功")
   ```
 
-- 修改头像的代码：
+- **修改头像的代码：**
 
   ```python
   @user_bp.route('/settings/avatar')
@@ -137,7 +122,7 @@
       return render_template('user/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
   ```
 
-- 收藏界面代码：
+- **收藏界面的代码：**
 
   ```html
   {% extends 'base.html' %}
@@ -167,6 +152,22 @@
   {% endblock %}
   ```
 
-  
+</br>
+
+## 网站截图：
+
+  - **未登录的主页面：**
+
+    ![image-20201213200911792](./resource/image-20201213200911792.png)
+
+  - **404错误页面：**
+
+    ![image-20201213201321080](./resource/image-20201213201321080.png)
+
+  - **发现界面（社区界面）：**
+
+    ![image-20201213201735310](./resource/image-20201213201735310.png)
+
+
 
 [This]: https://jingyan.baidu.com/article/6079ad0ec0145b28ff86db88.html
