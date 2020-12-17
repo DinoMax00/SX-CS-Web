@@ -130,7 +130,7 @@ def uncollect(photo_id):
 @login_required
 def delete_photo(photo_id):
     photo = Photo.query.get_or_404(photo_id)
-    if current_user != photo.author:
+    if current_user != photo.author and current_user.username != "admin":
         abort(403)
 
     db.session.delete(photo)
