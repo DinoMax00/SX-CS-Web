@@ -5,9 +5,8 @@
 
 # 导入公共库
 from flask import render_template, flash, redirect, url_for, current_app, request, Blueprint
-from flask_login import login_required, current_user, fresh_login_required, logout_user
+from flask_login import login_required, current_user, logout_user
 # 导入自定义库
-from TJ_Ins.settings import Operations
 from TJ_Ins.models import User, Photo, Collect
 from TJ_Ins.extensions import db, avatars
 from TJ_Ins.utils import flash_errors, redirect_back  # 组件
@@ -161,7 +160,7 @@ def crop_avatar():
 
 # 修改密码
 @user_bp.route('/settings/change-password', methods=['GET', 'POST'])
-@fresh_login_required
+@login_required
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
@@ -177,7 +176,7 @@ def change_password():
 
 # 修改邮箱
 @user_bp.route('/settings/change-email', methods=['GET', 'POST'])
-@fresh_login_required
+@login_required
 def change_email_request():
     form = ChangeEmailForm()
     if form.validate_on_submit():
@@ -188,7 +187,7 @@ def change_email_request():
 
 # 删除账户
 @user_bp.route('/settings/account/delete', methods=['GET', 'POST'])
-@fresh_login_required
+@login_required
 def delete_account():
     form = DeleteAccountForm()
     if form.validate_on_submit():

@@ -17,15 +17,8 @@ else:
     prefix = 'sqlite:////'
 
 
-# 邮箱验证的三种操作
-class Operations:
-    CONFIRM = 'confirm'
-    RESET_PASSWORD = 'reset-password'
-    CHANGE_EMAIL = 'change-email'
-
-
 # 基本配置
-class BaseConfig:
+class Base:
     # 基本参数
     INS_PHOTO_PER_PAGE = 12
     INS_MAIL_SUBJECT_PREFIX = '[TJ-Ins]'
@@ -56,25 +49,25 @@ class BaseConfig:
     BOOTSTRAP_SERVE_LOCAL = True
 
 
-class DevelopmentConfig(BaseConfig):
+class Develop(Base):
     SQLALCHEMY_DATABASE_URI = \
         prefix + os.path.join(basedir, 'data-dev.db')
     REDIS_URL = "redis://localhost"
 
 
-class TestingConfig(BaseConfig):
+class Test(Base):
     TESTING = True
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///'  # in-memory database
 
 
-class ProductionConfig(BaseConfig):
+class Product(Base):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
                                         prefix + os.path.join(basedir, 'data.db'))
 
 
 config = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
+    'development': Develop,
+    'testing': Test,
+    'production': Product,
 }

@@ -14,11 +14,6 @@ import os
 import uuid
 from PIL import Image
 from flask import current_app, request, url_for, redirect, flash
-from itsdangerous import BadSignature, SignatureExpired
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from TJ_Ins.models import User
-from TJ_Ins.extensions import db
-from TJ_Ins.settings import Operations
 
 
 # 是否是安全链接

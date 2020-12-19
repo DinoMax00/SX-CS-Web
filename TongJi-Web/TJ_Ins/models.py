@@ -4,9 +4,6 @@
 # @author : Dino
 # 定义网站所需要的所有数据库类型
 
-import os
-
-from flask import current_app
 from datetime import datetime
 from TJ_Ins.extensions import db
 # 使用flask—login管理需要用户模型继承这个类

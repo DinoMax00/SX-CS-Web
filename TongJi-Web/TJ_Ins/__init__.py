@@ -7,7 +7,6 @@
 import os
 import click
 from flask import Flask, render_template
-from flask_login import current_user
 from TJ_Ins.settings import config
 from TJ_Ins.blueprints.main import main_bp
 from TJ_Ins.blueprints.auth import auth_bp

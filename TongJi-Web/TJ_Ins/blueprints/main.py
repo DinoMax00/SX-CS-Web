@@ -10,7 +10,7 @@ from flask import render_template, flash, redirect, url_for, current_app, \
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
-from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
+from TJ_Ins.models import Photo, Collect, Comment, Tag
 from TJ_Ins.utils import rename_image, resize_image, flash_errors
 from TJ_Ins.forms.main import CommentForm, DescriptionForm
 

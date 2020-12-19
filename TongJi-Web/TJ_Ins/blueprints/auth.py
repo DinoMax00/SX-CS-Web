@@ -5,14 +5,14 @@
 # 处理认证视图
 
 from flask import render_template, flash, redirect, url_for, Blueprint
-from flask_login import login_user, logout_user, login_required, current_user, login_fresh, confirm_login
+from flask_login import login_user, logout_user, login_required, current_user
 
 from TJ_Ins.forms.auth import LoginForm, RegisterForm
 from TJ_Ins.models import User
 from TJ_Ins.utils import redirect_back
 from TJ_Ins.extensions import db
-auth_bp = Blueprint('auth', __name__)
 
+auth_bp = Blueprint('auth', __name__)
 
 # 登录
 @auth_bp.route('/login', methods=['GET', 'POST'])

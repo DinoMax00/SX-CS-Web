@@ -5,7 +5,7 @@
 # 主页表单
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Optional, Length
 
 
@@ -19,5 +19,3 @@ class CommentForm(FlaskForm):
 class DescriptionForm(FlaskForm):
     description = TextAreaField('简介', validators=[Optional(), Length(0, 500)])
     submit = SubmitField('发布')
-
-
