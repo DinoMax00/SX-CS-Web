@@ -18,7 +18,7 @@
 |   姓名   | 负责 | 具体工作 |
 | :------: | :--: | :------: |
 | **张迪** |  组长  |  后端开发，前后端连接  |
-|  胡昊育  |  后端  |  后端开发，项目文档  |
+|  &nbsp;&nbsp;胡昊育&nbsp;&nbsp;  |  &nbsp;&nbsp;后端&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;后端开发，项目文档&nbsp;&nbsp;&nbsp;  |
 |  赵一凡  |  前端  |  所有前端文件的整理  |
 |  裴书涵  |  前端  |  主页，图片展示页  |
 |  魏鹏远  |  前端  |  主页，图片展示页  |
@@ -30,11 +30,11 @@
 
 - **后端：**
 
-  ![后端开发工具](D:\Ray\Github\SX-CS-Web\resource\后端开发工具.jpg)
+  ![后端开发工具](./resource/back.jpg)
 
 - **前端：**
 
-  ![前端开发工具](D:\Ray\Github\SX-CS-Web\resource\前端开发工具.jpg)
+  ![前端开发工具](./resource/front.jpg)
 
 </br>
 
@@ -190,7 +190,7 @@
 
 - 样例截图：
 
-  ![祝福](D:\Ray\Github\SX-CS-Web\resource\祝福.jpg)
+  ![祝福](./resource/great.jpg)
 
 
 
