@@ -4,6 +4,7 @@
 # @author : Dino
 
 import os
+import random
 from flask import render_template, flash, redirect, url_for, current_app, \
     send_from_directory, request, abort, Blueprint
 from flask_login import login_required, current_user
@@ -12,7 +13,6 @@ from TJ_Ins.extensions import db
 from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
 from TJ_Ins.utils import rename_image, resize_image, flash_errors
 from TJ_Ins.forms.main import CommentForm, DescriptionForm
-import random
 
 main_bp = Blueprint('main', __name__)
 

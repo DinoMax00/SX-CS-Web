@@ -7,7 +7,7 @@
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager, AnonymousUserMixin
+from flask_login import LoginManager
 from flask_dropzone import Dropzone
 from flask_wtf import CSRFProtect
 from flask_avatars import Avatars

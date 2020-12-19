@@ -25,18 +25,17 @@ def create_app(config_name=None):
 
     app.config.from_object(config[config_name])
 
-    register_extensions(app)
-    register_blueprints(app)
-    register_errorhandles(app)
-    register_shell_context(app)
-    register_template_context(app)
-    register_commands(app)
+    extensions(app)
+    blueprints(app)
+    errors(app)
+    shell_context(app)
+    commands(app)
 
     return app
 
 
 # 注册扩展
-def register_extensions(app):
+def extensions(app):
     bootstrap.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
@@ -47,7 +46,7 @@ def register_extensions(app):
 
 
 # 注册蓝本
-def register_blueprints(app):
+def blueprints(app):
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/user')
@@ -55,32 +54,21 @@ def register_blueprints(app):
 
 
 # 注册shell上下文处理函数
-def register_shell_context(app):
+def shell_context(app):
     @app.shell_context_processor
     def make_shell_context():
         return dict(db=db)
 
 
-# 注册模板上下文处理函数
-
-def register_template_context(app):
-    pass
-    """
-    @app.context_processor
-    def make_template_context():
-        pass
-    """
-
-
 # 注册错误处理函数
-def register_errorhandles(app):
+def errors(app):
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template('errors/404.html'), 404
 
 
 # 注册命令行窗口的命令
-def register_commands(app):
+def commands(app):
     # 数据库初始化
     @app.cli.command()
     @click.option('--drop', is_flag=True, help='初始化前删除旧库')  # 增加一个输入参数，通过is_flag设为bool类型

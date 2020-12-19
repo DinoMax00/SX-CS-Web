@@ -56,21 +56,6 @@ class ChangePasswordForm(FlaskForm):
     password2 = PasswordField('再次输入新密码', validators=[DataRequired()])
     submit = SubmitField('提交')
 
-
-# 通知设置的表单
-class NotificationSettingForm(FlaskForm):
-    receive_comment_notification = BooleanField('新的评论')
-    receive_follow_notification = BooleanField('新的关注者')
-    receive_collect_notification = BooleanField('新的收藏')
-    submit = SubmitField('提交')
-
-
-# 隐私权限设置的表单
-class PrivacySettingForm(FlaskForm):
-    public_collections = BooleanField('公开我的收藏')
-    submit = SubmitField()
-
-
 # 删除账户的表单
 class DeleteAccountForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired(), Length(1, 20)])
