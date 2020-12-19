@@ -123,6 +123,7 @@ def change_avatar():
     crop_form = CropAvatarForm()
     return render_template('user/settings/change_avatar.html', upload_form=upload_form, crop_form=crop_form)
 
+
 # 上传头像
 @user_bp.route('/settings/avatar/upload', methods=['POST'])
 @login_required
@@ -136,6 +137,7 @@ def upload_avatar():
         flash('图片上传成功，请进行裁剪', '操作成功')
     flash_errors(form)
     return redirect(url_for('.change_avatar'))
+
 
 # 剪裁头像
 @user_bp.route('/settings/avatar/crop', methods=['POST'])
@@ -156,6 +158,7 @@ def crop_avatar():
     flash_errors(form)
     return redirect(url_for('.change_avatar'))
 
+
 # 修改密码
 @user_bp.route('/settings/change-password', methods=['GET', 'POST'])
 @fresh_login_required
@@ -171,6 +174,7 @@ def change_password():
             flash('原密码错误.', 'warning')
     return render_template('user/settings/change_password.html', form=form)
 
+
 # 修改邮箱
 @user_bp.route('/settings/change-email', methods=['GET', 'POST'])
 @fresh_login_required
@@ -180,6 +184,7 @@ def change_email_request():
         flash('个人邮箱修改成功', 'success')
         return redirect(url_for('.index', username=current_user.username))
     return render_template('user/settings/change_email.html', form=form)
+
 
 # 删除账户
 @user_bp.route('/settings/account/delete', methods=['GET', 'POST'])

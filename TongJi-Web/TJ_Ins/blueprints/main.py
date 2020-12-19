@@ -16,7 +16,6 @@ from TJ_Ins.forms.main import CommentForm, DescriptionForm
 
 main_bp = Blueprint('main', __name__)
 
-
 @main_bp.route('/')
 def index():
     if current_user.is_authenticated:
@@ -242,4 +241,3 @@ def show_card(name):
     num = random.randint(1, 9)
     num2 = random.randint(1, 9)
     return render_template('main/card.html', name=name, num=num, num2=num2)
-

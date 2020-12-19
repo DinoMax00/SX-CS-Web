@@ -71,4 +71,3 @@ def flash_errors(form):
         # 循环所有错误
         for error in errors:
             flash(u"Error in the %s field - %s" % (getattr(form, field).label.text,error))
-
