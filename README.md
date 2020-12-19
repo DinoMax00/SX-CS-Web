@@ -11,6 +11,14 @@
 
 * **前后端：** 前端使用BootStrap，后端使用Flask实现；
 
+* **完成情况：**
+
+  - [x] Consist of both the front-end and back-end. 
+  - [x] Coded by the group members themselves and differ from the demo in the tutorial.
+  - [x] Fully functional with data query and manipulation abilities.
+  - [x] The UI of front-end is well designed.
+  - [x] The performance of the back-end is optimized.
+  
   </br>
 
 ## 成员分工
