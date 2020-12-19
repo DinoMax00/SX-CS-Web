@@ -62,14 +62,11 @@ class User(db.Model, UserMixin):
     photos = db.relationship('Photo', back_populates='author', cascade='all')
     comments = db.relationship('Comment', back_populates='author', cascade='all')
     collections = db.relationship('Collect', back_populates='collector', cascade='all')
-    notifications = db.relationship('Notification', back_populates='receiver', cascade='all')
 
     def __init__(self, **kwargs):
         # 调用父类的构造函数
         super(User, self).__init__(**kwargs)
         self.generate_avatar()  # 头像生成
-        # self.follow(self)
-        # self.set_role()
 
     # user的外键
     photos = db.relationship('Photo', back_populates='author', cascade='all')
@@ -140,12 +137,6 @@ class User(db.Model, UserMixin):
         return self.active
 
 
-tagging = db.Table('tagging',
-                   db.Column('photo_id', db.Integer, db.ForeignKey('photo.id')),
-                   db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
-                   )
-
-
 # 图片
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -161,7 +152,6 @@ class Photo(db.Model):
     author = db.relationship('User', back_populates='photos')
     comments = db.relationship('Comment', back_populates='photo', cascade='all')
     collectors = db.relationship('Collect', back_populates='collected', cascade='all')
-    tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
 
 
 # 收藏数
@@ -174,14 +164,6 @@ class Collect(db.Model):
 
     collector = db.relationship('User', back_populates='collections', lazy='joined')
     collected = db.relationship('Photo', back_populates='collectors', lazy='joined')
-
-
-# 图片标签
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True, unique=True)
-    # 外键
-    photos = db.relationship('Photo', secondary=tagging, back_populates='tags')
 
 
 # 评论
@@ -201,19 +183,3 @@ class Comment(db.Model):
     replies = db.relationship('Comment', back_populates='replied', cascade='all')
     # 是否已被回复
     replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
-
-
-# 通知
-class Notification(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # 唯一标记
-    message = db.Column(db.Text, nullable=False)  # 通知主体
-    is_read = db.Column(db.Boolean, default=False)  # 是否已读
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)  # 时间戳
-    # 与唯一用户建立对应关系
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 收件人id
-    receiver = db.relationship('User', back_populates='notifications')
-
-
-
-
-

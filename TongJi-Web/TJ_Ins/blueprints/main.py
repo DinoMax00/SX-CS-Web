@@ -10,7 +10,7 @@ from flask import render_template, flash, redirect, url_for, current_app, \
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from TJ_Ins.extensions import db
-from TJ_Ins.models import Photo, Collect, Comment, Tag
+from TJ_Ins.models import Photo, Collect, Comment
 from TJ_Ins.utils import rename_image, resize_image, flash_errors
 from TJ_Ins.forms.main import CommentForm, DescriptionForm
 
@@ -28,10 +28,9 @@ def index():
     else:
         pagination = None
         photos = None
-    tags = Tag.query.join(Tag.photos).group_by(Tag.id).order_by(func.count(Photo.id).desc()).limit(10)
     if not current_user.is_authenticated:
         return render_template('main/main_page.html')
-    return render_template('main/index.html', pagination=pagination, photos=photos, tags=tags, Collect=Collect)
+    return render_template('main/index.html', pagination=pagination, photos=photos, Collect=Collect)
 
 
 # 上传照片
