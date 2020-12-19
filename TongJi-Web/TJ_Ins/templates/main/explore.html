@@ -12,7 +12,11 @@
         <div class="container">
           <p class="lead text-muted"><br/>“任一年中有12张有意义的照片就是一个好收获了。”&nbsp——安塞尔·亚当斯<br/><br/></p>
           <p>
-            <a href="{{url_for('main.upload')}}" class="btn btn-primary my-2">点击上传你的照片！</a>
+            {% if current_user.is_authenticated %}
+              <a href="{{url_for('main.upload')}}" class="btn btn-primary my-2">点击上传你的照片！</a>
+            {% else %}
+              <a href="{{url_for('auth.register')}}" class="btn btn-primary my-2">点击上传你的照片！</a>
+            {% endif %}
           </p>
         </div>
       </section>

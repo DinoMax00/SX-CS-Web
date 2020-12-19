@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}感谢！{% endblock %}
+{% block styles %}
+    <style>
+.card{
+    margin-top: 260px;
+    margin-bottom: -14px;
+{% if num==1 %}
+    background-image: url(../../static/images/cat1.jpg);
+{% elif num==2 %}
+    background-image: url(../../static/images/cat2.jpg);
+{% elif num==3 %}
+    background-image: url(../../static/images/cat3.jpg);
+{% elif num==4 %}
+    background-image: url(../../static/images/cat4.jpg);
+{% elif num==5 %}
+    background-image: url(../../static/images/cat5.jpg);
+{% elif num==6 %}
+    background-image: url(../../static/images/cat6.jpg);
+{% elif num==7 %}
+    background-image: url(../../static/images/cat7.jpg);
+{% elif num==8 %}
+    background-image: url(../../static/images/cat8.jpg);
+{% else %}
+    background-image: url(../../static/images/cat9.jpg);
+{% endif %}
+    background-size:498px 348px;
+    background-repeat:no-repeat;
+
+    display: -webkit-flex;
+    -webkit-align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:column;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:500px;
+    height:311px;
+    border-radius:15px;
+
+    animation-name:drop-fade;
+    animation-duration:1.2s;
+    animation-fill-mode:forwards;
+    animation-timing-function:cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+#Container {
+            background-color: rgba(255, 255, 255, 0.33);
+            width:500px;
+            height:311px;
+            border-radius:15px;
+        }
+
+@keyframes drop-fade{
+  0%{
+    filter:blur(5px);
+    opacity:0;
+    transform:scale(2) translate(-50%,-50px);
+    box-shadow:0px 0px 100px rgba(0,0,0,1);
+  }
+  100%{
+    filter:blur(0px);
+    opacity:1;
+    transform:scale(1) translate(-50%,-50%);
+    box-shadow:0px 40px 70px -15px rgba(0,0,0,0.3);
+  }
+}
+
+.card .head{
+  flex:1;
+  padding:20px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.card .head .avatar{
+  overflow:hidden;
+  height:120px;
+  width:120px;
+  border-radius:60px;
+  box-shadow:0px 20px 30px -10px rgba(0,0,0,0.5);
+}
+
+.card .head .avatar img{
+  height:100%;
+}
+
+.card .head .name{
+  margin:20px 0px 5px 0px;
+}
+
+.card .head .position{
+  margin: 5px 0px 0px 0px;
+}
+
+.card .body{
+  padding:0px 10px 20px 10px;
+}
+
+    </style>
+{% endblock %}
+
+
+{% block content %}
+<div class=row >
+    <div class="card">
+    <div id="Container">
+  <div class="head">
+    <div class="avatar">
+      <img src="{{ url_for('main.get_avatar', filename=current_user.avatar_s) }}">
+    </div>
+    <h2 class="name">欢迎你，{{ name }}</h2>
+    <h5 class="position">感谢注册TJ-Ins</h5>
+      <br>
+  <div>
+      {% if num2 == 1 %}
+      <h5>祝你早日脱单（已经有了就当我没说）</h5>
+      {% elif num2 == 2 %}
+      <h5>祝你期末满绩（注意身体）</h5>
+      {% elif num2 == 3 %}
+      <h5> Praying for your peace of mind.</h5>
+      {% elif num2 == 4 %}
+      <h5> 彩笔题桐叶，佳句问平安。</h5>
+      {% elif num2 == 5 %}
+      <h5> 人生自在常如此，何事能妨笑口开？</h5>
+      {% elif num2 == 6 %}
+      <h5> “May the force be with you.”</h5>
+      {% elif num2 == 7 %}
+      <h5> Wish you receive your expected answer soon~ </h5>
+      {% elif num2 == 8 %}
+      <h5> 永远别说永远,凡事都有可能。 </h5>
+      {% elif num2 == 9 %}
+      <h5> As long as you can still grab a breath, you fight. </h5>
+      {% endif %}
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}

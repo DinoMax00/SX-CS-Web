@@ -12,6 +12,7 @@ from TJ_Ins.extensions import db
 from TJ_Ins.models import Photo, User, Collect, Comment, Tag, Follow
 from TJ_Ins.utils import rename_image, resize_image, flash_errors
 from TJ_Ins.forms.main import CommentForm, DescriptionForm
+import random
 
 main_bp = Blueprint('main', __name__)
 
@@ -130,7 +131,7 @@ def uncollect(photo_id):
 @login_required
 def delete_photo(photo_id):
     photo = Photo.query.get_or_404(photo_id)
-    if current_user != photo.author:
+    if current_user != photo.author and current_user.username != "admin":
         abort(403)
 
     db.session.delete(photo)
@@ -232,3 +233,13 @@ def edit_description(photo_id):
 
     flash_errors(form)
     return redirect(url_for('.show_photo', photo_id=photo_id))
+
+
+# 小卡片
+@main_bp.route('/card/<name>')
+@login_required
+def show_card(name):
+    num = random.randint(1, 9)
+    num2 = random.randint(1, 9)
+    return render_template('main/card.html', name=name, num=num, num2=num2)
+
