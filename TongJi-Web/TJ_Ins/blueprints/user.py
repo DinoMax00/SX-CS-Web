@@ -177,6 +177,7 @@ def change_password():
 def change_email_request():
     form = ChangeEmailForm()
     if form.validate_on_submit():
+        flash('个人邮箱修改成功', 'success')
         return redirect(url_for('.index', username=current_user.username))
     return render_template('user/settings/change_email.html', form=form)
 
