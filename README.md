@@ -11,6 +11,8 @@
 
 * **前后端：** 前端使用BootStrap，后端使用Flask实现；
 
+* **Git地址：**https://github.com/DinoMax00/SX-CS-Web
+
 * **完成情况：**
 
   - [x] Consist of both the front-end and back-end. 
